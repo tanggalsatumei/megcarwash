@@ -1,0 +1,717 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MEG Carwash – Café • Carwash • Gym</title>
+  <meta name="description" content="MEG Carwash: Café, Carwash, dan Gym dalam satu tempat. Booking, membership, dan promo dalam satu halaman." />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://script.google.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"/>
+  <style>
+    :root{--primary:#0e0f12;--accent:#00ffd0;--bg:#ffffff;--card:#ffffff;--text:#1a1a1a;--muted:#6b7280;--border:#e5e7eb;--maxw:1200px;--headerTop:0px}
+    body.dark{--primary:#0a0a0a;--bg:#0a0a0a;--card:#111;--text:#eaeaea;--muted:#a1a1a1;--border:#222}
+    *{box-sizing:border-box}html,body{height:100%}body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--text)}
+    a{color:inherit;text-decoration:none}img{max-width:100%;display:block}
+    /* Header */
+    header{position:fixed;top:var(--headerTop);left:0;right:0;background:var(--primary);color:var(--accent);z-index:10000;box-shadow:0 2px 10px rgba(0,0,0,.15)}
+    .header-bar{max-width:var(--maxw);margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:12px;gap:12px}
+    nav ul{display:flex;gap:14px;list-style:none;margin:0;padding:0}
+    nav a{font-weight:700;color:var(--accent)}
+    .menu-toggle{display:none;background:none;border:0;color:var(--accent);font-size:1.8rem}
+    .btn{background:none;color:var(--accent);border:1px solid var(--accent);padding:.5rem .8rem;border-radius:10px;cursor:pointer;font-weight:700}
+    .btn.primary{background:var(--accent);color:#111;border:0}
+    .badge{padding:.15rem .5rem;border-radius:999px;border:1px solid var(--border);font-size:.75rem;color:var(--muted)}
+    .container{max-width:var(--maxw);margin:0 auto;padding:0 16px}
+
+    /* Promo bar */
+    .promo-marquee{display:none;position:fixed;top:0;left:0;right:0;background:var(--accent);color:#000;font-weight:800;padding:.45rem;text-align:center;z-index:11000}
+    .promo-marquee .marq{display:inline-block;white-space:nowrap;animation:marq 16s linear infinite}
+    @keyframes marq{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
+
+    /* Hero */
+    main, #hero{margin-top:calc(72px + var(--headerTop))}
+    #hero{position:relative;height:min(86vh,780px);overflow:hidden;background:#0b0d10}
+    .swiper-hero,.swiper-hero .swiper-wrapper,.swiper-hero .swiper-slide{height:100%}
+    .swiper-hero .swiper-slide{position:relative;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center}
+    .hero-overlay{position:absolute;inset:0;background:linear-gradient(rgba(0,0,0,.35),rgba(0,0,0,.65));z-index:1}
+    .slide-content{position:relative;z-index:2;display:flex;gap:20px;align-items:center;max-width:1000px;padding:28px;color:#fff}
+    .slide-content img{width:220px;aspect-ratio:1;object-fit:contain;border-radius:14px}
+    .slide-text h1{font-size:2.6rem;margin:0}
+    .slide-text p{margin:.5rem 0 1rem 0;color:#d1d5db}
+
+    /* Sections */
+    section{padding:28px 0}
+    h2.section-title{font-size:1.45rem;margin:0 0 12px 0}
+    .grid-3{display:grid;grid-template-columns:1fr;gap:16px}
+    @media(min-width:720px){.grid-3{grid-template-columns:repeat(3,1fr)}}
+
+    /* Cards */
+    .card{border:1px solid var(--border);background:var(--card);border-radius:14px;padding:14px}
+    .card h3{margin:.35rem 0}
+    .price{display:flex;gap:10px;align-items:center}
+    .price .old{text-decoration:line-through;color:#9ca3af;display:none}
+    .price .new{color:#10b981;font-weight:900}
+    .promo-label{display:none;position:absolute;top:10px;left:10px;background:#ffec00;color:#000;padding:6px 8px;font-weight:800;border-radius:8px}
+    .countdown-overlay{position:absolute;bottom:0;left:0;right:0;background:rgba(0,255,208,.95);color:#0a0a0a;font-weight:800;padding:6px 6px;text-align:center;border-bottom-left-radius:10px;border-bottom-right-radius:10px;display:none}
+
+    /* Swipers */
+    .swiper{padding:8px 0}
+    .gallery-item img,.testi-card img{height:180px;object-fit:cover;border-radius:10px}
+
+    /* Modal */
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:20000}
+    .modal.show{display:flex}
+    .modal .panel{width:min(860px,92vw);max-height:86vh;overflow:auto;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px}
+
+    /* Footer */
+    footer{background:var(--primary);color:var(--accent);margin-top:28px}
+    .footer-inner{max-width:var(--maxw);margin:0 auto;padding:18px 16px;display:grid;gap:18px}
+    .footer-inner .col{min-width:0}
+    #footer-map iframe{width:100%;height:220px;border:0;border-radius:10px}
+    @media(min-width:900px){.footer-inner{grid-template-columns:1fr 1fr}}
+
+    /* Responsive nav */
+    .offcanvas{position:fixed;left:-100%;top:0;width:80%;max-width:360px;height:100%;background:var(--primary);color:var(--accent);padding:22px;z-index:12000;transition:left .25s;overflow:auto}
+    .offcanvas.active{left:0}
+    .offcanvas nav ul{display:flex;flex-direction:column;gap:22px;padding-top:22px}
+    .offcanvas nav a{font-size:1.6rem}
+    @media(max-width:900px){.menu-toggle{display:block}nav ul{display:none}.slide-content{flex-direction:column;text-align:center}.slide-content img{width:170px}}
+
+    /* Utility */
+    .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .row.right{justify-content:flex-end}
+    input,select,textarea{width:100%;padding:.55rem .7rem;border:1px solid var(--border);border-radius:10px;background:var(--card);color:var(--text)}
+    label{font-size:.9rem;color:var(--muted)}
+    .muted{color:var(--muted)}
+  </style>
+</head>
+<body>
+  <!-- Promo marquee -->
+  <div id="promoBar" class="promo-marquee"><div class="marq" id="promoText">🔥 PROMO BUNDLING: Cuci Mobil + Kopi Latte hanya 49K 🔥</div></div>
+
+  <!-- Offcanvas -->
+  <aside id="offcanvas" class="offcanvas" aria-hidden="true">
+    <button class="btn" id="offClose">Tutup ✕</button>
+    <nav>
+      <ul>
+        <li><a href="#hero" class="off-link">Beranda</a></li>
+        <li><a href="#services" class="off-link">Layanan</a></li>
+        <li><a href="#menu" class="off-link">Menu Café</a></li>
+        <li><a href="#carwash" class="off-link">Paket Carwash</a></li>
+        <li><a href="#gym" class="off-link">Membership Gym</a></li>
+        <li><a href="#booking" class="off-link">Booking</a></li>
+        <li><a href="#testi" class="off-link">Testimoni</a></li>
+        <li><a href="#gallery" class="off-link">Galeri</a></li>
+        <li><a href="#contact" class="off-link">Kontak</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Header -->
+  <header>
+    <div class="header-bar">
+      <div class="row">
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">☰</button>
+        <div class="row" style="gap:10px">
+          <img src="https://cdn-icons-png.flaticon.com/512/3330/3330672.png" alt="MEG" style="width:34px;height:34px"/>
+          <div>
+            <div style="font-weight:800">MEG Carwash</div>
+            <div class="muted" style="font-size:.82rem">Café • Carwash • Gym</div>
+          </div>
+        </div>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="#services">Layanan</a></li>
+          <li><a href="#menu">Menu</a></li>
+          <li><a href="#booking">Booking</a></li>
+          <li><a href="#membership">Membership</a></li>
+          <li><a href="#contact">Kontak</a></li>
+        </ul>
+      </nav>
+      <div class="row">
+        <button id="darkToggle" class="btn" title="Dark Mode">🌙</button>
+        <button id="adminBtn" class="btn" title="Panel Admin">Admin</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section id="hero">
+    <div class="swiper swiper-hero" id="swiperHero">
+      <div class="swiper-wrapper" id="slidesContainer"></div>
+      <div class="hero-overlay"></div>
+      <div class="swiper-pagination"></div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+    </div>
+  </section>
+
+  <main>
+    <!-- Services -->
+    <section id="services" class="container">
+      <h2 class="section-title">Semua yang Kamu Butuhkan, Satu Tempat</h2>
+      <div class="grid-3">
+        <div class="card">
+          <span class="badge">Café</span>
+          <h3>Café MEG</h3>
+          <p class="muted">Kopi spesialty, snack, dan menu ringan untuk teman nunggu cuci mobil atau setelah nge-gym.</p>
+          <button class="btn primary" onclick="document.querySelector('#menu').scrollIntoView({behavior:'smooth'})">Lihat Menu</button>
+        </div>
+        <div class="card">
+          <span class="badge">Carwash</span>
+          <h3>MEG Carwash</h3>
+          <p class="muted">Cuci Express, Premium, hingga Detailing. Booking slotmu untuk menghindari antre.</p>
+          <button class="btn primary" onclick="document.querySelector('#booking').scrollIntoView({behavior:'smooth'})">Booking Sekarang</button>
+        </div>
+        <div class="card">
+          <span class="badge">Gym</span>
+          <h3>MEG Gym</h3>
+          <p class="muted">Fasilitas lengkap, kelas harian, dan program membership fleksibel.</p>
+          <button class="btn primary" onclick="document.querySelector('#gym').scrollIntoView({behavior:'smooth'})">Lihat Paket</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Café Menu (CRUD) -->
+    <section id="menu" class="container">
+      <div class="row" style="justify-content:space-between;align-items:flex-end">
+        <div>
+          <h2 class="section-title">Menu Café</h2>
+          <div class="muted">Tambah/ubah/hapus item via Panel Admin</div>
+        </div>
+        <div class="row"><input id="menuSearch" placeholder="Cari menu…"/></div>
+      </div>
+      <div id="menuGrid" class="grid-3"></div>
+    </section>
+
+    <!-- Carwash Packages (CRUD) -->
+    <section id="carwash" class="container">
+      <h2 class="section-title">Paket Carwash</h2>
+      <div id="carwashGrid" class="grid-3"></div>
+    </section>
+
+    <!-- Gym Membership Plans (CRUD) -->
+    <section id="gym" class="container">
+      <h2 class="section-title">Paket Membership Gym</h2>
+      <div id="gymGrid" class="grid-3"></div>
+    </section>
+
+    <!-- Membership Lookup -->
+    <section id="membership" class="container">
+      <h2 class="section-title">Cek Status Membership</h2>
+      <div class="card">
+        <div class="row" style="gap:12px">
+          <div style="flex:1">
+            <label for="memberInput">Nomor HP / Kode Member</label>
+            <input id="memberInput" placeholder="08xxxx / MEG-XXXX" />
+          </div>
+          <button class="btn primary" id="btnCheckMember">Cek</button>
+        </div>
+        <div id="memberResult" style="margin-top:12px" class="muted">Masukkan data untuk melihat status.</div>
+      </div>
+    </section>
+
+    <!-- Booking Form (Create) -->
+    <section id="booking" class="container">
+      <h2 class="section-title">Booking Carwash / Kelas Gym</h2>
+      <div class="card">
+        <div class="grid-3" style="grid-template-columns:1fr 1fr 1fr;gap:12px">
+          <div>
+            <label>Nama</label>
+            <input id="bkNama" placeholder="Nama lengkap" />
+          </div>
+          <div>
+            <label>No. HP</label>
+            <input id="bkHP" placeholder="08xxxx" />
+          </div>
+          <div>
+            <label>Layanan</label>
+            <select id="bkLayanan">
+              <option value="Carwash">Carwash</option>
+              <option value="Gym">Gym</option>
+            </select>
+          </div>
+          <div>
+            <label>Tanggal</label>
+            <input type="date" id="bkTanggal" />
+          </div>
+          <div>
+            <label>Jam</label>
+            <input type="time" id="bkJam" />
+          </div>
+          <div>
+            <label>Catatan</label>
+            <input id="bkCatatan" placeholder="Plat nomor / kelas gym" />
+          </div>
+        </div>
+        <div class="row right" style="margin-top:12px">
+          <button class="btn" id="bkReset">Reset</button>
+          <button class="btn primary" id="bkSubmit">Kirim Booking</button>
+        </div>
+        <div id="bkMsg" class="muted" style="margin-top:8px"></div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testi" class="container">
+      <h2 class="section-title">Apa Kata Pelanggan</h2>
+      <div class="swiper" id="testiSwiper">
+        <div class="swiper-wrapper" id="testiWrap"></div>
+        <div class="swiper-pagination"></div>
+      </div>
+    </section>
+
+    <!-- Gallery -->
+    <section id="gallery" class="container">
+      <h2 class="section-title">Galeri</h2>
+      <div class="swiper" id="galSwiper">
+        <div class="swiper-wrapper" id="galWrap"></div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer id="contact">
+    <div class="footer-inner">
+      <div class="col">
+        <h3 id="footerTitle">MEG Carwash</h3>
+        <p id="footerDesc" class="muted">Café, Carwash, dan Gym dalam satu lokasi.</p>
+        <p><strong>Alamat:</strong> <span id="footerAddress">-</span></p>
+        <p><strong>Jam Buka:</strong> <span id="footerHours">-</span></p>
+        <p><strong>Kontak:</strong> <a id="footerWA" href="#" target="_blank" rel="noopener">WhatsApp</a></p>
+      </div>
+      <div class="col" id="footer-map"></div>
+    </div>
+  </footer>
+
+  <!-- Admin Modal -->
+  <div id="adminModal" class="modal" aria-hidden="true">
+    <div class="panel">
+      <div class="row" style="justify-content:space-between">
+        <h3>Panel Admin</h3>
+        <div class="row" style="gap:6px">
+          <input id="adminPin" placeholder="PIN Admin" style="width:130px" />
+          <button class="btn" id="adminClose">Tutup</button>
+        </div>
+      </div>
+
+      <p class="muted" style="margin-top:0">Masukkan PIN untuk mengaktifkan tombol simpan/hapus (demo: hanya validasi sisi-klien).</p>
+
+      <div class="card">
+        <h4>Pengaturan Umum</h4>
+        <div class="grid-3" style="grid-template-columns:1fr 1fr 1fr">
+          <div><label>Judul Situs</label><input id="setTitle" placeholder="MEG Carwash"/></div>
+          <div><label>Nomor WA</label><input id="setWA" placeholder="62xxxxxxxxxx"/></div>
+          <div><label>Map Embed URL</label><input id="setMap" placeholder="Google Maps embed URL"/></div>
+          <div style="grid-column:1/-1"><label>Deskripsi</label><input id="setDesc" placeholder="Deskripsi singkat"/></div>
+        </div>
+        <div class="row right" style="margin-top:10px"><button class="btn primary" data-save="Pengaturan">Simpan Pengaturan</button></div>
+      </div>
+
+      <div class="card">
+        <h4>CRUD – Menu Café</h4>
+        <div id="adminMenuList" class="grid-3"></div>
+        <div class="row right" style="margin-top:10px"><button class="btn" data-add="MenuCafe">+ Tambah Item</button></div>
+      </div>
+
+      <div class="card">
+        <h4>CRUD – Paket Carwash</h4>
+        <div id="adminCarwashList" class="grid-3"></div>
+        <div class="row right" style="margin-top:10px"><button class="btn" data-add="PaketCarwash">+ Tambah Paket</button></div>
+      </div>
+
+      <div class="card">
+        <h4>CRUD – Paket Gym</h4>
+        <div id="adminGymList" class="grid-3"></div>
+        <div class="row right" style="margin-top:10px"><button class="btn" data-add="PaketGym">+ Tambah Paket</button></div>
+      </div>
+
+      <div class="card">
+        <h4>CRUD – Members</h4>
+        <div id="adminMemberList" class="grid-3"></div>
+        <div class="row right" style="margin-top:10px"><button class="btn" data-add="Members">+ Tambah Member</button></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+  <script>
+    /* ===== CONFIG (sesuaikan) ===== */
+    const API_URL = "https://script.google.com/macros/s/AKfycbydl4_bKwUdo37UVRoMUXpkEGuH3ymaybyFuDQZhpd-V4BhOTzkwhXMsyKha7ijZxGR/exec"; // TODO: ganti dengan Apps Script Anda
+    const API_TOKEN = "AKfycbydl4_bKwUdo37UVRoMUXpkEGuH3ymaybyFuDQZhpd-V4BhOTzkwhXMsyKha7ijZxGR"; // samakan dengan token di Apps Script
+    const LOCALE = "id-ID";
+    const TZONE = 'Asia/Jakarta';
+
+    /* ===== Utilities (adapted from your previous stack) ===== */
+    const $ = (s, ctx=document) => ctx.querySelector(s);
+    const $$ = (s, ctx=document) => Array.from((ctx||document).querySelectorAll(s));
+    const pad = n => String(n).padStart(2,'0');
+    const formatRupiah = v => {
+      if(v==null||v==='') return '-';
+      const n = Number(String(v).toString().replace(/[^\d.-]/g,''));
+      if(isNaN(n)) return v; return n.toLocaleString(LOCALE);
+    };
+    const safeParseJSON = t => { try{return JSON.parse(t);}catch(e){return null;} };
+    async function safeFetch(url, opt={}){
+      const res = await fetch(url, {...opt, cache:'no-cache'});
+      const txt = await res.text();
+      const j = safeParseJSON(txt);
+      if(!j) throw new Error('Invalid JSON from API');
+      return j;
+    }
+    function escapeHtml(s){ if(s==null) return ''; return String(s).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+    /* ===== Time & promo helpers (optional banner) ===== */
+    function getTZPartsNow(tz){
+      const now = new Date();
+      const fmt = new Intl.DateTimeFormat('en-US',{timeZone:tz,year:'numeric',month:'numeric',day:'numeric',hour:'numeric',minute:'numeric',second:'numeric',hour12:false});
+      const p = {}; fmt.formatToParts(now).forEach(x=>{if(x.type!=='literal') p[x.type]=x.value});
+      return {year:+p.year, month:+p.month, day:+p.day, hour:+p.hour, minute:+p.minute, second:+p.second};
+    }
+    function tzWallClockToEpochMs(tz, y, m, d, h, mi, s){
+      const parts = getTZPartsNow(tz);
+      const utcForParts = Date.UTC(y, m-1, d, h, mi, s||0);
+      const now = new Date();
+      const diffMin = Math.round((utcForParts - now.getTime())/60000);
+      return Date.UTC(y, m-1, d, h, mi, s||0) - (diffMin*60000);
+    }
+
+    /* ===== Simple API client for Google Apps Script =====
+       Expected actions: list, create, update, delete, settings.get, settings.set
+       Query examples:
+       - GET  ?action=list&sheet=MenuCafe&token=XXX
+       - POST ?action=create&sheet=MenuCafe  body: JSON {data:{...}}
+    ================================================ */
+    const api = {
+      async list(sheet){
+        const url = `${API_URL}?action=list&sheet=${encodeURIComponent(sheet)}&token=${encodeURIComponent(API_TOKEN)}`;
+        const j = await safeFetch(url);
+        return j.data||[];
+      },
+      async create(sheet, data){
+        const j = await safeFetch(`${API_URL}?action=create&sheet=${encodeURIComponent(sheet)}&token=${encodeURIComponent(API_TOKEN)}`, {method:'POST', body:JSON.stringify({data})});
+        return j;
+      },
+      async update(sheet, id, data){
+        const j = await safeFetch(`${API_URL}?action=update&sheet=${encodeURIComponent(sheet)}&token=${encodeURIComponent(API_TOKEN)}`, {method:'POST', body:JSON.stringify({id, data})});
+        return j;
+      },
+      async remove(sheet, id){
+        const j = await safeFetch(`${API_URL}?action=delete&sheet=${encodeURIComponent(sheet)}&token=${encodeURIComponent(API_TOKEN)}`, {method:'POST', body:JSON.stringify({id})});
+        return j;
+      },
+      async settingsGet(){
+        const url = `${API_URL}?action=settings.get&token=${encodeURIComponent(API_TOKEN)}`;
+        const j = await safeFetch(url); return j.data||{};
+      },
+      async settingsSet(data){
+        const j = await safeFetch(`${API_URL}?action=settings.set&token=${encodeURIComponent(API_TOKEN)}`, {method:'POST', body:JSON.stringify({data})});
+        return j;
+      },
+      async findMember(keyword){
+        const url = `${API_URL}?action=find.member&token=${encodeURIComponent(API_TOKEN)}&q=${encodeURIComponent(keyword)}`;
+        const j = await safeFetch(url); return j.data||null;
+      },
+      async bookingCreate(data){
+        const j = await safeFetch(`${API_URL}?action=booking.create&token=${encodeURIComponent(API_TOKEN)}`, {method:'POST', body:JSON.stringify({data})});
+        return j;
+      }
+    };
+
+    /* ===== Data state ===== */
+    let SETTINGS = {};
+    let SLIDES = [];
+    let MENU = [];
+    let CARWASH = [];
+    let GYM = [];
+    let TESTI = [];
+    let GALLERY = [];
+
+    /* ===== Renderers ===== */
+    function renderSlides(){
+      const c = $('#slidesContainer'); c.innerHTML = '';
+      const fallback = [
+        {bg:'https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&w=1600&auto=format&fit=crop', img:'', title:'Café MEG', caption:'Kopi enak, suasana asik', cta:'Lihat Menu', link:'#menu'},
+        {bg:'https://images.unsplash.com/photo-1554200876-56f8e9c5d6c9?q=80&w=1600&auto=format&fit=crop', img:'', title:'MEG Carwash', caption:'Cuci bersih kilap maksimal', cta:'Booking', link:'#booking'},
+        {bg:'https://images.unsplash.com/photo-1556817411-31ae72fa3ea0?q=80&w=1600&auto=format&fit=crop', img:'', title:'MEG Gym', caption:'Latihan nyaman, hasil maksimal', cta:'Paket Gym', link:'#gym'}
+      ];
+      (SLIDES.length?SLIDES:fallback).forEach(s=>{
+        const slide = document.createElement('div'); slide.className='swiper-slide';
+        slide.style.backgroundImage = `url('${s.bg}')`;
+        slide.innerHTML = `<div class="slide-content">
+          ${s.img?`<img src="${s.img}" alt="${escapeHtml(s.title||'slide')}" loading="lazy">`:''}
+          <div class="slide-text">
+            <h1>${escapeHtml(s.title||'')}</h1>
+            ${s.caption?`<p>${escapeHtml(s.caption)}</p>`:''}
+            ${s.cta?`<a class="btn primary" href="${s.link||'#'}">${escapeHtml(s.cta)}</a>`:''}
+          </div>
+        </div>`;
+        c.appendChild(slide);
+      });
+    }
+
+    function cardMenu(m){
+      return `<div class="card" data-id="${escapeHtml(m.id||'')}">
+        <div class="row" style="justify-content:space-between">
+          <h3>${escapeHtml(m.nama||'-')}</h3>
+          <span class="badge">${escapeHtml(m.kategori||'Umum')}</span>
+        </div>
+        <div class="price"><span class="old">Rp ${formatRupiah(m.hargaCoret||'')}</span> <span class="new">Rp ${formatRupiah(m.harga||0)}</span></div>
+        ${m.deskripsi?`<p class="muted" style="margin:.3rem 0">${escapeHtml(m.deskripsi)}</p>`:''}
+      </div>`;
+    }
+
+    function cardPaket(p){
+      return `<div class="card" data-id="${escapeHtml(p.id||'')}">
+        <h3>${escapeHtml(p.nama||'-')}</h3>
+        <p class="muted">${escapeHtml(p.deskripsi||'')}</p>
+        <div class="price"><span class="old">Rp ${formatRupiah(p.hargaCoret||'')}</span> <span class="new">Rp ${formatRupiah(p.harga||0)}</span></div>
+      </div>`;
+    }
+
+    function renderMenu(){
+      const q = ($('#menuSearch').value||'').toLowerCase();
+      const list = MENU.filter(x=> !q || (x.nama||'').toLowerCase().includes(q) || (x.kategori||'').toLowerCase().includes(q));
+      $('#menuGrid').innerHTML = list.map(cardMenu).join('');
+    }
+    function renderCarwash(){ $('#carwashGrid').innerHTML = CARWASH.map(cardPaket).join(''); }
+    function renderGym(){ $('#gymGrid').innerHTML = GYM.map(cardPaket).join(''); }
+
+    function renderTesti(){
+      const w = $('#testiWrap'); w.innerHTML = '';
+      (TESTI.length?TESTI:[{nama:'Budi',komentar:'Tempatnya nyaman, mobil bersih kinclong!',foto:'https://via.placeholder.com/600x400?text=User'}]).forEach(t=>{
+        const slide = document.createElement('div'); slide.className='swiper-slide';
+        slide.innerHTML = `<div class="card testi-card">
+          <img src="${t.foto||'https://via.placeholder.com/600x400?text=User'}" alt="${escapeHtml(t.nama||'Pelanggan')}" loading="lazy"/>
+          <p><strong>${escapeHtml(t.nama||'')}</strong><br><span class="muted">${escapeHtml(t.komentar||'')}</span></p>
+        </div>`;
+        w.appendChild(slide);
+      });
+    }
+
+    function renderGallery(){
+      const w = $('#galWrap'); w.innerHTML = '';
+      (GALLERY.length?GALLERY:[{url:'https://via.placeholder.com/1000x700?text=Cafe',alt:'Café'},{url:'https://via.placeholder.com/1000x700?text=Carwash',alt:'Carwash'},{url:'https://via.placeholder.com/1000x700?text=Gym',alt:'Gym'}]).forEach(g=>{
+        const slide = document.createElement('div'); slide.className='swiper-slide gallery-item';
+        slide.innerHTML = `<img src="${g.url}" alt="${escapeHtml(g.alt||'Galeri')}" loading="lazy"/>`;
+        w.appendChild(slide);
+      });
+    }
+
+    function applySettings(){
+      document.title = SETTINGS.title || 'MEG Carwash';
+      $('#footerTitle').textContent = SETTINGS.title || 'MEG Carwash';
+      $('#footerDesc').textContent = SETTINGS.deskripsi || 'Café, Carwash, dan Gym dalam satu lokasi.';
+      $('#footerAddress').textContent = SETTINGS.alamat || '-';
+      $('#footerHours').textContent = SETTINGS.jam || '-';
+      const wa = SETTINGS.wa || '';
+      if(wa){ $('#footerWA').href = `https://wa.me/${wa}`; $('#footerWA').textContent = wa; }
+      if(SETTINGS.maps){ const holder = $('#footer-map'); holder.innerHTML = `<iframe src="${SETTINGS.maps}" loading="lazy" title="Peta"></iframe>`; }
+      if(SETTINGS.promo){ $('#promoText').textContent = SETTINGS.promo; $('#promoBar').style.display = 'block'; document.documentElement.style.setProperty('--headerTop','34px'); }
+    }
+
+    /* ===== Admin helpers ===== */
+    function pinOk(){ return ($('#adminPin').value||'').trim().length>=4; } // demo-only
+
+    function adminCard(item, fields, sheet){
+      const rows = fields.map(f=>{
+        const type = f.type||'text';
+        const val = item[f.key]??'';
+        if(type==='textarea'){
+          return `<div><label>${escapeHtml(f.label)}</label><textarea data-key="${f.key}">${escapeHtml(val)}</textarea></div>`;
+        }
+        return `<div><label>${escapeHtml(f.label)}</label><input data-key="${f.key}" value="${escapeHtml(val)}" placeholder="${escapeHtml(f.placeholder||'')}" /></div>`;
+      }).join('');
+      return `<div class="card" data-id="${escapeHtml(item.id||'')}">
+        <div class="grid-3" style="grid-template-columns:1fr 1fr 1fr">${rows}</div>
+        <div class="row right" style="margin-top:8px">
+          <button class="btn" data-del="${sheet}" ${pinOk()?'':'disabled'}>Hapus</button>
+          <button class="btn primary" data-save="${sheet}" ${pinOk()?'':'disabled'}>Simpan</button>
+        </div>
+      </div>`;
+    }
+
+    function mountAdminLists(){
+      // Menu Café
+      const fMenu = [
+        {key:'id',label:'ID (unik)'},
+        {key:'nama',label:'Nama Menu'},
+        {key:'kategori',label:'Kategori',placeholder:'Coffee/Tea/Snack'},
+        {key:'harga',label:'Harga'},
+        {key:'hargaCoret',label:'Harga Coret (opsi)'},
+        {key:'deskripsi',label:'Deskripsi',type:'textarea'}
+      ];
+      $('#adminMenuList').innerHTML = (MENU.length?MENU:[{id:'M-001',nama:'Espresso',kategori:'Coffee',harga:15000,deskripsi:'Single shot'}]).map(x=>adminCard(x,fMenu,'MenuCafe')).join('');
+
+      // Carwash
+      const fCW = [
+        {key:'id',label:'ID (unik)'},
+        {key:'nama',label:'Nama Paket'},
+        {key:'harga',label:'Harga'},
+        {key:'hargaCoret',label:'Harga Coret (opsi)'},
+        {key:'deskripsi',label:'Deskripsi',type:'textarea'}
+      ];
+      $('#adminCarwashList').innerHTML = (CARWASH.length?CARWASH:[{id:'C-EXP',nama:'Express Wash',harga:30000,deskripsi:'Cuci cepat 15 menit'}]).map(x=>adminCard(x,fCW,'PaketCarwash')).join('');
+
+      // Gym
+      const fGym = [
+        {key:'id',label:'ID (unik)'},
+        {key:'nama',label:'Nama Paket'},
+        {key:'harga',label:'Harga'},
+        {key:'hargaCoret',label:'Harga Coret (opsi)'},
+        {key:'deskripsi',label:'Deskripsi',type:'textarea'}
+      ];
+      $('#adminGymList').innerHTML = (GYM.length?GYM:[{id:'G-BUL',nama:'Bulanan',harga:150000,deskripsi:'Akses gym 30 hari'}]).map(x=>adminCard(x,fGym,'PaketGym')).join('');
+
+      // Members
+      const fMem = [
+        {key:'id',label:'Member ID (unik)',placeholder:'MEG-0001'},
+        {key:'nama',label:'Nama'},
+        {key:'hp',label:'No. HP'},
+        {key:'tier',label:'Tier',placeholder:'Silver/Gold/Platinum'},
+        {key:'berlaku_sampai',label:'Berlaku s/d (YYYY-MM-DD)'}
+      ];
+      const seedMem = [{id:'MEG-0001',nama:'Andi',hp:'08123456789',tier:'Gold',berlaku_sampai:'2025-12-31'}];
+      $('#adminMemberList').innerHTML = (window.MEMBERS?.length?window.MEMBERS:seedMem).map(x=>adminCard(x,fMem,'Members')).join('');
+    }
+
+    function collectCardData(card){
+      const inputs = $$('[data-key]', card);
+      const data = {}; inputs.forEach(i=> data[i.dataset.key] = i.value);
+      const id = card.getAttribute('data-id') || data.id || '';
+      return {id, data};
+    }
+
+    /* ===== Membership lookup ===== */
+    async function doCheckMember(){
+      const q = ($('#memberInput').value||'').trim();
+      if(!q){ $('#memberResult').textContent = 'Masukkan nomor HP atau kode member.'; return; }
+      try{
+        const m = await api.findMember(q);
+        if(!m){ $('#memberResult').textContent = 'Tidak ditemukan. Coba periksa kembali.'; return; }
+        const aktif = new Date(m.berlaku_sampai) >= new Date();
+        $('#memberResult').innerHTML = `<strong>${escapeHtml(m.nama)}</strong> • ${escapeHtml(m.tier)}<br>HP: ${escapeHtml(m.hp)}<br>Berlaku s/d: ${escapeHtml(m.berlaku_sampai)}<br>Status: <span style="font-weight:800;${aktif?'color:#10b981':'color:#ef4444'}">${aktif?'AKTIF':'KADALUARSA'}</span>`;
+      } catch(e){ $('#memberResult').textContent = 'Gagal cek. Periksa koneksi/API.'; }
+    }
+
+    /* ===== Booking ===== */
+    async function doBooking(){
+      const data = {
+        nama: $('#bkNama').value||'',
+        hp: $('#bkHP').value||'',
+        layanan: $('#bkLayanan').value||'',
+        tanggal: $('#bkTanggal').value||'',
+        jam: $('#bkJam').value||'',
+        catatan: $('#bkCatatan').value||''
+      };
+      if(!data.nama||!data.hp||!data.tanggal||!data.jam){ $('#bkMsg').textContent = 'Lengkapi data wajib.'; return; }
+      $('#bkMsg').textContent = 'Mengirim…';
+      try{ await api.bookingCreate(data); $('#bkMsg').textContent = 'Booking terkirim. Kami akan konfirmasi via WhatsApp.'; }
+      catch(e){ $('#bkMsg').textContent = 'Gagal mengirim booking. Coba lagi.'; }
+    }
+
+    /* ===== INIT ===== */
+    let heroSwiper, testiSwiper, galSwiper;
+    function initSwipers(){
+      if(heroSwiper) heroSwiper.destroy(true,true);
+      heroSwiper = new Swiper('#swiperHero',{loop:true,autoplay:{delay:5000,disableOnInteraction:false},pagination:{el:'#swiperHero .swiper-pagination',clickable:true},navigation:{nextEl:'#swiperHero .swiper-button-next',prevEl:'#swiperHero .swiper-button-prev'}});
+      if(testiSwiper) testiSwiper.destroy(true,true);
+      testiSwiper = new Swiper('#testiSwiper',{loop:true,slidesPerView:1.1,spaceBetween:12,breakpoints:{640:{slidesPerView:2},900:{slidesPerView:3}},pagination:{el:'#testiSwiper .swiper-pagination',clickable:true}});
+      if(galSwiper) galSwiper.destroy(true,true);
+      galSwiper = new Swiper('#galSwiper',{loop:true,slidesPerView:1.2,spaceBetween:12,breakpoints:{480:{slidesPerView:2},640:{slidesPerView:3},900:{slidesPerView:4}},pagination:{el:'#gallery .swiper-pagination',clickable:true},navigation:{nextEl:'#gallery .swiper-button-next',prevEl:'#gallery .swiper-button-prev'}});
+    }
+
+    async function init(){
+      // Dark mode restore
+      if(localStorage.getItem('dark')==='1') document.body.classList.add('dark');
+
+      // Load settings & master data (graceful fallback jika API belum siap)
+      try{
+        SETTINGS = await api.settingsGet();
+      }catch(e){ SETTINGS = {title:'MEG Carwash',wa:'62xxxxxxxxxx',promo:'PROMO BUNDLING: Cuci + Kopi 49K'} }
+      applySettings();
+
+      try{ SLIDES = await api.list('Slider'); }catch(e){ SLIDES = []; }
+      try{ MENU = await api.list('MenuCafe'); }catch(e){ MENU = []; }
+      try{ CARWASH = await api.list('PaketCarwash'); }catch(e){ CARWASH = []; }
+      try{ GYM = await api.list('PaketGym'); }catch(e){ GYM = []; }
+      try{ TESTI = await api.list('Testimoni'); }catch(e){ TESTI = []; }
+      try{ GALLERY = await api.list('Galeri'); }catch(e){ GALLERY = []; }
+      try{ window.MEMBERS = await api.list('Members'); }catch(e){ window.MEMBERS = []; }
+
+      renderSlides(); initSwipers();
+      renderMenu(); renderCarwash(); renderGym();
+      renderTesti(); renderGallery();
+      mountAdminLists();
+
+      // Events
+      $('#menuSearch').addEventListener('input', renderMenu);
+      $('#darkToggle').addEventListener('click', ()=>{ const on = document.body.classList.toggle('dark'); localStorage.setItem('dark', on?'1':'0'); });
+      $('#menuToggle').addEventListener('click', ()=> $('#offcanvas').classList.add('active'));
+      $('#offClose').addEventListener('click', ()=> $('#offcanvas').classList.remove('active'));
+      $$('.off-link').forEach(a=> a.addEventListener('click', ()=> $('#offcanvas').classList.remove('active')));
+
+      $('#btnCheckMember').addEventListener('click', doCheckMember);
+      $('#bkReset').addEventListener('click', ()=> ['bkNama','bkHP','bkTanggal','bkJam','bkCatatan'].forEach(id=> $('#'+id).value=''));
+      $('#bkSubmit').addEventListener('click', doBooking);
+
+      // Admin modal
+      $('#adminBtn').addEventListener('click', ()=> $('#adminModal').classList.add('show'));
+      $('#adminClose').addEventListener('click', ()=> $('#adminModal').classList.remove('show'));
+      $('#adminPin').addEventListener('input', ()=>{ mountAdminLists(); });
+
+      // Admin add buttons
+      document.addEventListener('click', async (e)=>{
+        const btn = e.target.closest('[data-add]');
+        if(!btn) return;
+        const sheet = btn.getAttribute('data-add');
+        if(!pinOk()) return alert('PIN salah/ kosong.');
+        const sample = {id:'',nama:'',harga:'',deskripsi:''};
+        try{ await api.create(sheet, sample); alert('Item dibuat. Refresh daftar.'); }catch(err){ alert('Gagal create item.'); }
+      });
+
+      // Admin save/delete
+      document.addEventListener('click', async (e)=>{
+        const del = e.target.closest('[data-del]');
+        const save = e.target.closest('[data-save]');
+        if(del){
+          if(!pinOk()) return alert('PIN salah/ kosong.');
+          const sheet = del.getAttribute('data-del');
+          const card = del.closest('.card');
+          const {id} = collectCardData(card);
+          if(!id) return alert('ID kosong.');
+          if(!confirm('Hapus item ini?')) return;
+          try{ await api.remove(sheet, id); alert('Terhapus.'); }catch(err){ alert('Gagal hapus.'); }
+        }
+        if(save){
+          if(!pinOk()) return alert('PIN salah/ kosong.');
+          const sheet = save.getAttribute('data-save');
+          const card = save.closest('.card');
+          const {id, data} = collectCardData(card);
+          if(!id) return alert('ID wajib diisi.');
+          try{ await api.update(sheet, id, data); alert('Tersimpan.'); }
+          catch(err){ alert('Gagal simpan.'); }
+        }
+      });
+
+      // Save Pengaturan
+      document.querySelector('[data-save="Pengaturan"]').addEventListener('click', async ()=>{
+        if(!pinOk()) return alert('PIN salah/ kosong.');
+        const data = { title: $('#setTitle').value, wa: $('#setWA').value, maps: $('#setMap').value, deskripsi: $('#setDesc').value };
+        try{ await api.settingsSet(data); alert('Pengaturan disimpan.'); }catch(e){ alert('Gagal simpan pengaturan.'); }
+      });
+    }
+
+    // Boot
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
