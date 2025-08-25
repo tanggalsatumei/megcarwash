@@ -2,9 +2,13 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MEG Carwash – Café • Carwash • Gym</title>
+  <!-- NOTE: untuk demo cepat. Untuk production, install Tailwind via CLI/PostCSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .container { max-width: 1100px; }
+  </style>
 </head>
 <body class="bg-gray-50 text-gray-900">
 
@@ -23,13 +27,16 @@
     </div>
   </header>
 
-  <!-- HERO -->
-  <section class="relative bg-cover bg-center h-[70vh]" style="background-image: url('https://i.ibb.co/jG2YQ8W/slider-cafe.jpg');">
-    <div class="bg-black bg-opacity-50 h-full flex items-center justify-center">
+  <!-- HERO (pakai gambar stabil/valid) -->
+  <section class="relative bg-cover bg-center h-[60vh]"
+           style="background-image:url('https://images.unsplash.com/photo-1542362567-b07e54358753')">
+    <div class="bg-black/50 h-full flex items-center justify-center">
       <div class="text-center text-white">
         <h2 class="text-4xl md:text-5xl font-bold mb-4">Café • Carwash • Gym</h2>
         <p class="text-lg mb-6">Semua dalam satu tempat – MEG Carwash</p>
-        <a href="#booking" class="bg-green-600 px-6 py-3 rounded-lg text-white font-semibold hover:bg-green-700">Booking Sekarang</a>
+        <a href="#booking" class="bg-green-600 px-6 py-3 rounded-lg text-white font-semibold hover:bg-green-700">
+          Booking Sekarang
+        </a>
       </div>
     </div>
   </section>
@@ -62,8 +69,12 @@
   <section id="membership" class="py-12">
     <div class="container mx-auto px-4 text-center">
       <h2 class="text-3xl font-bold mb-6">Cek Membership</h2>
-      <input type="text" id="memberQuery" placeholder="Masukkan No. HP atau ID Member" class="border p-3 rounded w-full md:w-1/2 mb-4">
-      <button onclick="findMember()" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">Cek</button>
+      <div class="max-w-xl mx-auto">
+        <input type="text" id="memberQuery" placeholder="Masukkan No. HP atau ID Member"
+               class="border p-3 rounded w-full mb-4">
+        <button id="btnFindMember"
+                class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">Cek</button>
+      </div>
       <div id="member-result" class="mt-6 text-lg"></div>
     </div>
   </section>
@@ -89,13 +100,29 @@
     </div>
   </section>
 
+  <!-- TESTIMONI -->
+  <section id="testimoni" class="py-12">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-bold mb-6 text-center">Testimoni</h2>
+      <div id="testimoni-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
+    </div>
+  </section>
+
+  <!-- GALERI -->
+  <section id="galeri" class="py-12 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-bold mb-6 text-center">Galeri</h2>
+      <div id="galeri-list" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
+    </div>
+  </section>
+
   <!-- ADMIN PANEL -->
   <section id="admin" class="py-12">
     <div class="container mx-auto px-4">
       <h2 class="text-3xl font-bold mb-6 text-center">Admin Panel</h2>
       <div id="admin-login" class="text-center">
         <input type="password" id="admin-pin" placeholder="Masukkan PIN Admin" class="border p-2 rounded mb-4">
-        <button onclick="adminLogin()" class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700">Login</button>
+        <button id="btnAdminLogin" class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700">Login</button>
       </div>
       <div id="admin-panel" class="hidden">
         <div class="mb-4">
@@ -104,7 +131,7 @@
             <option value="PaketCarwash">Paket Carwash</option>
             <option value="PaketGym">Paket Gym</option>
           </select>
-          <button onclick="loadAdminData()" class="ml-2 bg-green-600 text-white px-4 py-2 rounded">Load Data</button>
+          <button id="btnLoadAdmin" class="ml-2 bg-green-600 text-white px-4 py-2 rounded">Load Data</button>
         </div>
         <div id="admin-table" class="overflow-x-auto mb-6"></div>
         <h3 class="text-xl font-bold mb-2">Tambah / Edit Data</h3>
@@ -116,8 +143,8 @@
           <input type="text" id="admin-deskripsi" placeholder="Deskripsi" class="border p-2 rounded w-full">
           <input type="text" id="admin-img" placeholder="Link Gambar (khusus Menu Café)" class="border p-2 rounded w-full">
           <div class="flex gap-2">
-            <button type="button" onclick="saveData()" class="bg-blue-600 text-white px-4 py-2 rounded">Simpan</button>
-            <button type="button" onclick="resetAdminForm()" class="bg-gray-400 text-white px-4 py-2 rounded">Reset</button>
+            <button type="button" id="btnSaveData" class="bg-blue-600 text-white px-4 py-2 rounded">Simpan</button>
+            <button type="button" id="btnResetAdmin" class="bg-gray-400 text-white px-4 py-2 rounded">Reset</button>
           </div>
         </form>
       </div>
@@ -131,124 +158,190 @@
 
   <!-- SCRIPT -->
   <script>
+    // ====== KONFIGURASI API ======
     const API_URL = "https://script.google.com/macros/s/AKfycbydl4_bKwUdo37UVRoMUXpkEGuH3ymaybyFuDQZhpd-V4BhOTzkwhXMsyKha7ijZxGR/exec";
     const API_TOKEN = "AKfycbydl4_bKwUdo37UVRoMUXpkEGuH3ymaybyFuDQZhpd-V4BhOTzkwhXMsyKha7ijZxGR";
-    const ADMIN_PIN = "1234"; // PIN admin sederhana
+    const ADMIN_PIN = "1234"; // demo only (untuk produksi, validasi di server)
 
-    // --- FUNCTION PUBLIC (Cafe, Carwash, Gym, Member, Booking) --- 
+    // ====== HELPER: Fetch aman (tahan Unauthorized / non-JSON) ======
+    async function fetchJSONSafe(url, options = {}) {
+      try {
+        const res = await fetch(url, options);
+        const text = await res.text();
+        // Coba parse JSON
+        try {
+          const json = JSON.parse(text);
+          return json;
+        } catch (e) {
+          // Jika bukan JSON, kembalikan error yang bisa ditampilkan
+          return { success: false, error: text || ("HTTP " + res.status) };
+        }
+      } catch (err) {
+        return { success: false, error: err.message || "Network error" };
+      }
+    }
+
+    // ====== UI Helper ======
+    function currency(n){ if(n === "" || n === undefined || n === null) return ""; const num = Number(n); return isNaN(num) ? n : "Rp " + num.toLocaleString(); }
+    function el(id){ return document.getElementById(id); }
+
+    // ====== LOAD DATA PUBLIC ======
     async function loadCafeMenu() {
-      const res = await fetch(`${API_URL}?action=list&sheet=MenuCafe&token=${API_TOKEN}`);
-      const data = await res.json();
-      const list = document.getElementById("cafe-list");
+      const data = await fetchJSONSafe(`${API_URL}?action=list&sheet=MenuCafe&token=${API_TOKEN}`);
+      const list = el("cafe-list");
       list.innerHTML = "";
-      data.forEach(item => {
+      if (data.success === false && data.error) {
+        list.innerHTML = `<p class="text-red-600">Gagal load Menu Café: ${data.error}</p>`;
+        return;
+      }
+      (data || []).forEach(item => {
         const card = document.createElement("div");
         card.className = "bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition";
         card.innerHTML = `
-          <img src="${item.img || 'https://via.placeholder.com/400x250?text=No+Image'}" alt="${item.nama}" class="w-full h-48 object-cover">
+          <img src="${item.img || 'https://via.placeholder.com/400x250?text=No+Image'}" alt="${item.nama || ''}" class="w-full h-48 object-cover">
           <div class="p-4">
-            <h3 class="text-lg font-bold">${item.nama}</h3>
+            <h3 class="text-lg font-bold">${item.nama || ''}</h3>
             <p class="text-sm text-gray-500 mb-2">${item.deskripsi || ''}</p>
             <div class="flex items-center justify-between">
-              <span class="text-xl font-semibold text-green-600">Rp ${Number(item.harga).toLocaleString()}</span>
-              ${item.hargaCoret ? `<span class="line-through text-gray-400">Rp ${Number(item.hargaCoret).toLocaleString()}</span>` : ""}
+              <span class="text-xl font-semibold text-green-600">${currency(item.harga)}</span>
+              ${item.hargaCoret ? `<span class="line-through text-gray-400">${currency(item.hargaCoret)}</span>` : ""}
             </div>
-          </div>
-        `;
+          </div>`;
         list.appendChild(card);
       });
     }
 
     async function loadCarwash() {
-      const res = await fetch(`${API_URL}?action=list&sheet=PaketCarwash&token=${API_TOKEN}`);
-      const data = await res.json();
-      const list = document.getElementById("carwash-list");
+      const data = await fetchJSONSafe(`${API_URL}?action=list&sheet=PaketCarwash&token=${API_TOKEN}`);
+      const list = el("carwash-list");
       list.innerHTML = "";
-      data.forEach(item => {
+      if (data.success === false && data.error) {
+        list.innerHTML = `<p class="text-red-600">Gagal load Carwash: ${data.error}</p>`;
+        return;
+      }
+      (data || []).forEach(item => {
         const card = document.createElement("div");
         card.className = "bg-white p-4 rounded-xl shadow hover:shadow-lg transition";
         card.innerHTML = `
-          <h3 class="text-lg font-bold">${item.nama}</h3>
+          <h3 class="text-lg font-bold">${item.nama || ''}</h3>
           <p class="text-sm text-gray-500 mb-2">${item.deskripsi || ''}</p>
-          <span class="text-xl font-semibold text-green-600">Rp ${Number(item.harga).toLocaleString()}</span>
-          ${item.hargaCoret ? `<span class="line-through text-gray-400 ml-2">Rp ${Number(item.hargaCoret).toLocaleString()}</span>` : ""}
-        `;
+          <span class="text-xl font-semibold text-green-600">${currency(item.harga)}</span>
+          ${item.hargaCoret ? `<span class="line-through text-gray-400 ml-2">${currency(item.hargaCoret)}</span>` : ""}`;
         list.appendChild(card);
       });
     }
 
     async function loadGym() {
-      const res = await fetch(`${API_URL}?action=list&sheet=PaketGym&token=${API_TOKEN}`);
-      const data = await res.json();
-      const list = document.getElementById("gym-list");
+      const data = await fetchJSONSafe(`${API_URL}?action=list&sheet=PaketGym&token=${API_TOKEN}`);
+      const list = el("gym-list");
       list.innerHTML = "";
-      data.forEach(item => {
+      if (data.success === false && data.error) {
+        list.innerHTML = `<p class="text-red-600">Gagal load Gym: ${data.error}</p>`;
+        return;
+      }
+      (data || []).forEach(item => {
         const card = document.createElement("div");
         card.className = "bg-white p-4 rounded-xl shadow hover:shadow-lg transition";
         card.innerHTML = `
-          <h3 class="text-lg font-bold">${item.nama}</h3>
+          <h3 class="text-lg font-bold">${item.nama || ''}</h3>
           <p class="text-sm text-gray-500 mb-2">${item.deskripsi || ''}</p>
-          <span class="text-xl font-semibold text-green-600">Rp ${Number(item.harga).toLocaleString()}</span>
-          ${item.hargaCoret ? `<span class="line-through text-gray-400 ml-2">Rp ${Number(item.hargaCoret).toLocaleString()}</span>` : ""}
-        `;
+          <span class="text-xl font-semibold text-green-600">${currency(item.harga)}</span>
+          ${item.hargaCoret ? `<span class="line-through text-gray-400 ml-2">${currency(item.hargaCoret)}</span>` : ""}`;
         list.appendChild(card);
       });
     }
 
-    async function findMember() {
-      const q = document.getElementById("memberQuery").value.trim();
+    async function doFindMember() {
+      const q = el("memberQuery").value.trim();
       if (!q) return;
-      const res = await fetch(`${API_URL}?action=find.member&q=${q}&token=${API_TOKEN}`);
-      const data = await res.json();
-      const result = document.getElementById("member-result");
+      const data = await fetchJSONSafe(`${API_URL}?action=find.member&q=${encodeURIComponent(q)}&token=${API_TOKEN}`);
+      const result = el("member-result");
       if (data && data.nama) {
-        result.innerHTML = `<p><strong>${data.nama}</strong> (${data.tier})<br> Berlaku sampai: ${data.berlaku_sampai}</p>`;
+        result.innerHTML = `<p><strong>${data.nama}</strong> (${data.tier})<br>Berlaku sampai: ${data.berlaku_sampai}</p>`;
+      } else if (data.success === false && data.error) {
+        result.innerHTML = `<p class="text-red-600">${data.error}</p>`;
       } else {
         result.innerHTML = `<p class="text-red-600">Member tidak ditemukan</p>`;
       }
     }
 
-    document.getElementById("bookingForm").addEventListener("submit", async (e) => {
+    async function submitBooking(e) {
       e.preventDefault();
       const form = e.target;
-      const formData = Object.fromEntries(new FormData(form));
-      const res = await fetch(API_URL, {
+      const payload = Object.fromEntries(new FormData(form));
+      const data = await fetchJSONSafe(API_URL, {
         method: "POST",
-        body: JSON.stringify({ action: "booking.create", sheet: "Bookings", token: API_TOKEN, data: formData })
+        body: JSON.stringify({ action: "booking.create", sheet: "Bookings", token: API_TOKEN, data: payload })
       });
-      const data = await res.json();
-      document.getElementById("booking-result").innerHTML = data.success ? 
-        "<p class='text-green-600'>Booking berhasil!</p>" : 
-        "<p class='text-red-600'>Booking gagal!</p>";
-      form.reset();
-    });
+      el("booking-result").innerHTML = (data && data.success)
+        ? "<p class='text-green-600'>Booking berhasil!</p>"
+        : `<p class='text-red-600'>Booking gagal: ${(data && data.error) ? data.error : 'unknown error'}</p>`;
+      if (data && data.success) form.reset();
+    }
 
-    // --- ADMIN PANEL ---
+    async function loadTestimoni() {
+      const data = await fetchJSONSafe(`${API_URL}?action=list&sheet=Testimoni&token=${API_TOKEN}`);
+      const list = el("testimoni-list");
+      list.innerHTML = "";
+      if (data.success === false && data.error) {
+        list.innerHTML = `<p class="text-red-600">Gagal load Testimoni: ${data.error}</p>`;
+        return;
+      }
+      (data || []).forEach(item => {
+        const card = document.createElement("div");
+        card.className = "bg-white p-4 rounded-xl shadow hover:shadow-lg transition text-center";
+        card.innerHTML = `
+          <img src="${item.foto || 'https://via.placeholder.com/100'}" class="w-16 h-16 rounded-full mx-auto mb-3">
+          <p class="italic">"${item.komentar || ''}"</p>
+          <h4 class="mt-2 font-bold">${item.nama || ''}</h4>`;
+        list.appendChild(card);
+      });
+    }
+
+    async function loadGaleri() {
+      const data = await fetchJSONSafe(`${API_URL}?action=list&sheet=Galeri&token=${API_TOKEN}`);
+      const list = el("galeri-list");
+      list.innerHTML = "";
+      if (data.success === false && data.error) {
+        list.innerHTML = `<p class="text-red-600">Gagal load Galeri: ${data.error}</p>`;
+        return;
+      }
+      (data || []).forEach(item => {
+        const card = document.createElement("div");
+        card.innerHTML = `<img src="${item.url}" alt="${item.alt || ''}" class="rounded-lg shadow w-full h-44 object-cover">`;
+        list.appendChild(card);
+      });
+    }
+
+    // ====== ADMIN ======
     function adminLogin() {
-      const pin = document.getElementById("admin-pin").value;
+      const pin = el("admin-pin").value.trim();
       if (pin === ADMIN_PIN) {
-        document.getElementById("admin-login").classList.add("hidden");
-        document.getElementById("admin-panel").classList.remove("hidden");
+        el("admin-login").classList.add("hidden");
+        el("admin-panel").classList.remove("hidden");
       } else {
         alert("PIN salah!");
       }
     }
 
     async function loadAdminData() {
-      const sheet = document.getElementById("admin-sheet").value;
-      const res = await fetch(`${API_URL}?action=list&sheet=${sheet}&token=${API_TOKEN}`);
-      const data = await res.json();
-      const tableDiv = document.getElementById("admin-table");
-      let html = `<table class="min-w-full border"><thead><tr>`;
-      if (data.length > 0) {
-        Object.keys(data[0]).forEach(k => { html += `<th class="border px-2 py-1">${k}</th>`; });
-        html += `<th class="border px-2 py-1">Aksi</th></tr></thead><tbody>`;
+      const sheet = el("admin-sheet").value;
+      const data = await fetchJSONSafe(`${API_URL}?action=list&sheet=${encodeURIComponent(sheet)}&token=${API_TOKEN}`);
+      const tableDiv = el("admin-table");
+      if (data && data.success === false && data.error) {
+        tableDiv.innerHTML = `<p class="text-red-600">${data.error}</p>`;
+        return;
+      }
+      let html = `<table class="min-w-full border text-sm"><thead><tr>`;
+      if ((data || []).length > 0) {
+        Object.keys(data[0]).forEach(k => { html += `<th class="border px-2 py-1 bg-gray-100">${k}</th>`; });
+        html += `<th class="border px-2 py-1 bg-gray-100">Aksi</th></tr></thead><tbody>`;
         data.forEach(row => {
           html += `<tr>`;
-          Object.values(row).forEach(v => { html += `<td class="border px-2 py-1">${v}</td>`; });
+          Object.values(row).forEach(v => { html += `<td class="border px-2 py-1 align-top">${v ?? ""}</td>`; });
           html += `<td class="border px-2 py-1">
-            <button onclick='editData(${JSON.stringify(row)})' class="text-blue-600">Edit</button> | 
-            <button onclick='deleteData("${sheet}","${row.id}")' class="text-red-600">Hapus</button>
+            <button class="text-blue-600 mr-2" onclick='editData(${JSON.stringify(row).replace(/'/g,"&#39;")})'>Edit</button>
+            ${row.id ? `<button class="text-red-600" onclick='deleteData("${sheet}","${String(row.id).replace(/"/g,"&quot;")}")'>Hapus</button>` : ""}
           </td>`;
           html += `</tr>`;
         });
@@ -260,66 +353,68 @@
     }
 
     function editData(row) {
-      document.getElementById("admin-id").value = row.id || "";
-      document.getElementById("admin-nama").value = row.nama || "";
-      document.getElementById("admin-harga").value = row.harga || "";
-      document.getElementById("admin-hargaCoret").value = row.hargaCoret || "";
-      document.getElementById("admin-deskripsi").value = row.deskripsi || "";
-      document.getElementById("admin-img").value = row.img || "";
+      el("admin-id").value = row.id || "";
+      el("admin-nama").value = row.nama || "";
+      el("admin-harga").value = row.harga || "";
+      el("admin-hargaCoret").value = row.hargaCoret || "";
+      el("admin-deskripsi").value = row.deskripsi || "";
+      el("admin-img").value = row.img || "";
     }
 
     async function saveData() {
-      const sheet = document.getElementById("admin-sheet").value;
-      const id = document.getElementById("admin-id").value;
+      const sheet = el("admin-sheet").value;
+      const id = el("admin-id").value.trim();
       const data = {
-        nama: document.getElementById("admin-nama").value,
-        harga: document.getElementById("admin-harga").value,
-        hargaCoret: document.getElementById("admin-hargaCoret").value,
-        deskripsi: document.getElementById("admin-deskripsi").value,
-        img: document.getElementById("admin-img").value,
+        nama: el("admin-nama").value,
+        harga: el("admin-harga").value,
+        hargaCoret: el("admin-hargaCoret").value,
+        deskripsi: el("admin-deskripsi").value,
+        img: el("admin-img").value,
       };
-      const action = id ? "update" : "create";
-      const res = await fetch(API_URL, {
-        method: "POST",
-        body: JSON.stringify({ action, sheet, token: API_TOKEN, id, data })
-      });
-      const result = await res.json();
-      if (result.success) {
+      const payload = { action: id ? "update" : "create", sheet, token: API_TOKEN, id, data };
+      const res = await fetchJSONSafe(API_URL, { method: "POST", body: JSON.stringify(payload) });
+      if (res && res.success) {
         alert("Data tersimpan");
         resetAdminForm();
         loadAdminData();
+        // Refresh list publik
         loadCafeMenu(); loadCarwash(); loadGym();
       } else {
-        alert("Gagal simpan");
+        alert("Gagal simpan: " + ((res && res.error) ? res.error : "unknown error"));
       }
     }
 
     async function deleteData(sheet, id) {
       if (!confirm("Yakin hapus data ini?")) return;
-      const res = await fetch(API_URL, {
-        method: "POST",
-        body: JSON.stringify({ action: "delete", sheet, token: API_TOKEN, id })
-      });
-      const result = await res.json();
-      if (result.success) {
+      const res = await fetchJSONSafe(API_URL, { method: "POST", body: JSON.stringify({ action: "delete", sheet, token: API_TOKEN, id }) });
+      if (res && res.success) {
         alert("Data terhapus");
         loadAdminData();
         loadCafeMenu(); loadCarwash(); loadGym();
       } else {
-        alert("Gagal hapus");
+        alert("Gagal hapus: " + ((res && res.error) ? res.error : "unknown error"));
       }
     }
 
     function resetAdminForm() {
-      document.getElementById("admin-id").value = "";
-      document.getElementById("adminForm").reset();
+      el("admin-id").value = "";
+      el("adminForm").reset();
     }
 
-    // INIT
+    // ====== EVENT BINDING ======
     document.addEventListener("DOMContentLoaded", () => {
       loadCafeMenu();
       loadCarwash();
       loadGym();
+      loadTestimoni();
+      loadGaleri();
+
+      el("bookingForm").addEventListener("submit", submitBooking);
+      el("btnFindMember").addEventListener("click", doFindMember);
+      el("btnAdminLogin").addEventListener("click", adminLogin);
+      el("btnLoadAdmin").addEventListener("click", loadAdminData);
+      el("btnSaveData").addEventListener("click", saveData);
+      el("btnResetAdmin").addEventListener("click", resetAdminForm);
     });
   </script>
 </body>
