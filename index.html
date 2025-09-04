@@ -4,10 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MEG Cafe, Gym & Carwash</title>
+
   <!-- Swiper CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
-  <!-- Lightbox CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
   <style>
     :root {
       --color-primary: #2D4A7F;
@@ -15,207 +18,209 @@
       --color-dark: #1A1A1A;
       --color-light: #ffffff;
     }
-    body { font-family: Arial, sans-serif; margin:0; padding:0; }
-    header, footer { width:100%; }
-    /* Hero */
-    #hero { width:100%; position:relative; }
-    .swiper-hero { width:100%; height:500px; }
-    .hero-slide { display:grid; grid-template-columns:70% 30%; align-items:center; height:100%; }
-    .hero-text { padding:2rem; color:var(--color-light); }
-    .hero-bg { width:100%; height:100%; object-fit:cover; }
-    .swiper-button-next, .swiper-button-prev { color:#fff; }
-    /* Produk */
-    #products { padding:3rem 1rem; }
-    .product-card { border:1px solid #eee; border-radius:12px; overflow:hidden; padding:1rem; text-align:center; background:#fff; }
-    .product-card img { width:100%; max-height:180px; object-fit:cover; border-radius:8px; cursor:pointer; }
-    /* Packages */
-    #packages { padding:3rem 1rem; }
-    .package-card { background:#fff; border-radius:12px; padding:1rem; margin:1rem 0; border:1px solid #eee; }
-    /* Gallery */
-    #gallery { padding:3rem 1rem; }
-    .swiper-gallery { height:300px; }
-    .swiper-gallery img { width:100%; height:100%; object-fit:cover; border-radius:8px; }
-    /* Video Section */
-    #video-section { display:grid; grid-template-columns:70% 30%; gap:1rem; padding:3rem 1rem; align-items:start; }
-    #video-section iframe { width:100%; height:350px; border-radius:12px; }
-    .advantages ul { list-style:none; padding:0; }
-    .advantages li { margin:0.5rem 0; }
-    /* Footer */
-    footer { background:var(--color-dark); color:#fff; padding:2rem; text-align:center; }
-    /* WhatsApp Floating */
-    .whatsapp-float { position:fixed; bottom:20px; right:20px; width:60px; height:60px; z-index:1000; }
-    .whatsapp-float img { width:100%; height:auto; }
-    /* Responsive */
-    @media(max-width:768px){
-      .hero-slide { grid-template-columns:1fr; }
-      #video-section { grid-template-columns:1fr; }
+    body { font-family: sans-serif; }
+    footer { background: var(--color-dark); color: var(--color-light); padding: 2rem; text-align: center; }
+    .whatsapp-float {
+      position: fixed; width: 60px; height: 60px; bottom: 20px; right: 20px; z-index: 100;
     }
+    .whatsapp-float img { width: 100%; height: auto; }
   </style>
 </head>
-<body>
-  <!-- Hero -->
-  <section id="hero">
+<body class="bg-gray-50">
+
+  <!-- Hero Section -->
+  <section id="hero" class="relative">
     <div class="swiper swiper-hero">
-      <div class="swiper-wrapper" id="hero-slides"></div>
+      <div class="swiper-wrapper" id="slidesContainer">
+        <!-- Slides injected from API -->
+      </div>
+      <!-- Nav buttons -->
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
       <div class="swiper-pagination"></div>
+    </div>
+  </section>
+
+  <!-- Produk -->
+  <section id="products" class="py-10 max-w-6xl mx-auto px-4">
+    <h2 class="text-2xl font-bold mb-6">Menu & Produk</h2>
+    <div id="productFilters" class="mb-4 flex flex-wrap gap-2"></div>
+    <div id="productList" class="grid md:grid-cols-3 gap-6"></div>
+  </section>
+
+  <!-- Paket Gym & Carwash -->
+  <section id="packages" class="py-10 bg-gray-100">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="text-2xl font-bold mb-6">Paket Gym & Carwash</h2>
+      <div id="packageList" class="grid md:grid-cols-3 gap-6"></div>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section id="gallery" class="py-10 max-w-6xl mx-auto px-4">
+    <h2 class="text-2xl font-bold mb-6">Galeri</h2>
+    <div class="swiper swiper-gallery">
+      <div class="swiper-wrapper" id="galleryContainer"></div>
       <div class="swiper-button-prev"></div>
       <div class="swiper-button-next"></div>
     </div>
   </section>
 
-  <!-- Products -->
-  <section id="products">
-    <h2>Menu & Produk</h2>
-    <div id="products-list" class="grid md:grid-cols-3 gap-4"></div>
-  </section>
-
-  <!-- Packages -->
-  <section id="packages">
-    <h2>Paket Gym & Carwash</h2>
-    <div id="packages-list"></div>
-  </section>
-
-  <!-- Gallery -->
-  <section id="gallery">
-    <h2>Galeri</h2>
-    <div class="swiper swiper-gallery">
-      <div class="swiper-wrapper" id="gallery-slides"></div>
-      <div class="swiper-pagination"></div>
+  <!-- Video & Kelebihan -->
+  <section id="video" class="py-10 max-w-6xl mx-auto px-4 grid md:grid-cols-10 gap-6">
+    <div class="col-span-7">
+      <iframe id="youtubeEmbed" width="100%" height="400" src="" frameborder="0" allowfullscreen></iframe>
     </div>
-  </section>
-
-  <!-- Video & Advantages -->
-  <section id="video-section">
-    <div id="youtube-container"></div>
-    <div class="advantages">
-      <h3>Kelebihan Kami</h3>
-      <ul id="advantages-list">
-        <li>✅ Gym modern & lengkap</li>
-        <li>✅ Carwash cepat & wangi</li>
-        <li>✅ Cafe nyaman & cozy</li>
+    <div class="col-span-3">
+      <h2 class="text-xl font-bold mb-4">Kelebihan Kami</h2>
+      <ul id="advantages" class="space-y-2 list-disc pl-4">
+        <!-- Injected from API (sheet settings / advantages) -->
       </ul>
     </div>
   </section>
 
-  <!-- Maps -->
-  <section id="maps">
-    <h2>Lokasi Kami</h2>
-    <div id="maps-container"></div>
+  <!-- Kontak & Maps -->
+  <section id="contact" class="py-10 bg-gray-100">
+    <div class="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-6">
+      <div>
+        <h2 class="text-2xl font-bold mb-4">Kontak & Alamat</h2>
+        <p id="businessAddress"></p>
+        <p class="mt-2">Jam buka: <span id="businessHours"></span></p>
+      </div>
+      <div>
+        <iframe id="mapsEmbed"
+          src=""
+          width="100%" height="300" style="border:0;"
+          allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+    </div>
   </section>
 
   <!-- Footer -->
   <footer>
-    <p>&copy; 2025 MEG Cafe, Gym & Carwash</p>
+    <p>&copy; <span id="brandName">MEG Cafe, Gym & Carwash</span> - All rights reserved.</p>
   </footer>
 
   <!-- WhatsApp Button -->
-  <a href="#" id="wa-button" class="whatsapp-float" target="_blank">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+  <a href="#" id="waButton" class="whatsapp-float" target="_blank">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" />
   </a>
 
-  <!-- JS Libraries -->
-  <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+  <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbyA-J8A83fhg2hHCmoGZ6bvVSw5RHfbzy2Rs--rg-QEMpHvjbbuBj23HoKWz3Cf7Y5B/exec"; // ganti dengan endpoint JSON
+    const API_URL = "https://script.google.com/macros/s/AKfycbyA-J8A83fhg2hHCmoGZ6bvVSw5RHfbzy2Rs--rg-QEMpHvjbbuBj23HoKWz3Cf7Y5B/exec";
 
     async function fetchData() {
       const res = await fetch(API_URL);
-      return await res.json();
+      const data = await res.json();
+
+      renderSlider(data.slider);
+      renderProducts(data.products);
+      renderPackages(data.packages);
+      renderGallery(data.gallery);
+      renderSettings(data.settings);
     }
 
-    function renderHero(slides){
-      const container = document.getElementById("hero-slides");
-      container.innerHTML = "";
-      slides.filter(s => s.active === "YES").forEach(s => {
+    function renderSlider(slides) {
+      const container = document.getElementById("slidesContainer");
+      slides.filter(s => s.active === "YES").sort((a,b)=>a.order-b.order).forEach(slide => {
         container.innerHTML += `
-          <div class="swiper-slide hero-slide" style="background:${s.bg_color || "var(--color-primary)"} url('${s.image_url || ""}') center/cover no-repeat;">
-            <div class="hero-text">
-              <h2>${s.title}</h2>
-              <p>${s.subtitle || ""}</p>
-              ${s.button_link ? `<a href="${s.button_link}" class="btn">${s.button_text}</a>` : ""}
+          <div class="swiper-slide">
+            <div class="grid grid-cols-10 h-[500px]" style="background:${slide.bg_color || 'var(--color-primary)'} url('${slide.bg_image || ''}') center/cover no-repeat;">
+              <div class="col-span-7 flex flex-col justify-center text-white p-10">
+                <h2 class="text-3xl font-bold">${slide.title}</h2>
+                <p class="mt-2">${slide.subtitle}</p>
+                <a href="${slide.button_link}" class="mt-4 inline-block bg-[var(--color-accent)] text-black px-6 py-2 rounded">${slide.button_text}</a>
+              </div>
+              <div class="col-span-3 flex items-center justify-center">
+                <img src="${slide.image_url}" alt="${slide.alt_text}" class="max-h-[400px] object-contain" />
+              </div>
             </div>
-            <div>
-              ${s.image_url ? `<img src="${s.image_url}" alt="${s.alt_text}" class="hero-bg">` : ""}
-            </div>
-          </div>`;
+          </div>
+        `;
       });
       new Swiper(".swiper-hero", {
-        loop:true,
-        autoplay:{delay:4000},
-        navigation:{nextEl:".swiper-button-next", prevEl:".swiper-button-prev"},
-        pagination:{el:".swiper-pagination", clickable:true}
+        loop: true,
+        autoplay: { delay: 4000 },
+        navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
+        pagination: { el: ".swiper-pagination", clickable: true },
       });
     }
 
-    function renderProducts(products){
-      const list = document.getElementById("products-list");
+    function renderProducts(products) {
+      const list = document.getElementById("productList");
       list.innerHTML = "";
       products.filter(p => p.active === "YES" && p.status === "READY").forEach(p => {
         list.innerHTML += `
-          <div class="product-card">
-            <a href="${p.image_url}" class="glightbox">
-              <img src="${p.image_url}" alt="${p.name}">
+          <div class="bg-white rounded shadow p-4">
+            <a href="${p.image_url}" target="_blank">
+              <img src="${p.image_url}" alt="${p.name}" class="w-full h-40 object-cover rounded mb-2" />
             </a>
-            <h3>${p.name}</h3>
-            <p>${p.description || ""}</p>
-            <p><strong>${p.currency} ${p.price_original}</strong></p>
-          </div>`;
+            <h3 class="text-lg font-bold">${p.name}</h3>
+            <p class="text-sm text-gray-600">${p.description}</p>
+            <p class="mt-2 font-semibold">${p.currency} ${p.price_original}</p>
+          </div>
+        `;
       });
-      GLightbox({ selector: ".glightbox" });
     }
 
-    function renderPackages(packages){
-      const list = document.getElementById("packages-list");
+    function renderPackages(packages) {
+      const list = document.getElementById("packageList");
       list.innerHTML = "";
       packages.filter(p => p.active === "YES").forEach(p => {
         list.innerHTML += `
-          <div class="package-card">
-            <h3>${p.name}</h3>
-            <p>${p.description}</p>
-            <p><strong>${p.price} / ${p.duration}</strong></p>
-          </div>`;
+          <div class="bg-white rounded shadow p-4">
+            <img src="${p.image_url}" alt="${p.name}" class="w-full h-40 object-cover rounded mb-2" />
+            <h3 class="text-lg font-bold">${p.name}</h3>
+            <p class="text-sm text-gray-600">${p.description}</p>
+            <p class="mt-2 font-semibold">${p.currency || 'IDR'} ${p.price} / ${p.duration}</p>
+          </div>
+        `;
       });
     }
 
-    function renderGallery(gallery){
-      const container = document.getElementById("gallery-slides");
-      container.innerHTML = "";
-      gallery.filter(g => g.active === "YES").forEach(g => {
+    function renderGallery(gallery) {
+      const container = document.getElementById("galleryContainer");
+      gallery.filter(g => g.active === "YES").sort((a,b)=>a.order-b.order).forEach(g => {
         container.innerHTML += `
-          <div class="swiper-slide"><img src="${g.image_url}" alt="${g.caption}"></div>`;
+          <div class="swiper-slide">
+            <img src="${g.image_url}" alt="${g.caption}" class="w-full h-64 object-cover rounded" />
+            <p class="mt-2 text-center">${g.caption}</p>
+          </div>
+        `;
       });
       new Swiper(".swiper-gallery", {
-        loop:true,
-        autoplay:{delay:3000},
-        pagination:{el:".swiper-pagination", clickable:true}
+        loop: true,
+        slidesPerView: 3,
+        spaceBetween: 10,
+        navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
       });
     }
 
-    function renderSettings(settings){
+    function renderSettings(settings) {
       const s = {};
-      settings.forEach(item => s[item.key] = item.value);
-      // Maps
-      document.getElementById("maps-container").innerHTML = `
-        <iframe src="${s.google_maps_embed}" width="100%" height="350" style="border:0;" allowfullscreen loading="lazy"></iframe>
-      `;
-      // YouTube
-      document.getElementById("youtube-container").innerHTML = `
-        <iframe src="https://www.youtube.com/embed/videoseries?list=${s.youtube_playlist_id}" frameborder="0" allowfullscreen></iframe>
-      `;
-      // WhatsApp
-      document.getElementById("wa-button").href = `https://wa.me/${s.phone_whatsapp}`;
+      settings.forEach(row => s[row.key] = row.value);
+
+      document.getElementById("brandName").innerText = s.brand_name || "MEG Cafe, Gym & Carwash";
+      document.getElementById("businessAddress").innerText = s.business_address || "";
+      document.getElementById("businessHours").innerText = `${s.open_days || ''} ${s.open_hours || ''}`;
+      document.getElementById("waButton").href = `https://wa.me/${s.phone_whatsapp}`;
+      document.getElementById("mapsEmbed").src = s.google_maps_embed || "";
+      document.getElementById("youtubeEmbed").src = `https://www.youtube.com/embed/videoseries?list=${s.youtube_playlist_id}`;
+      
+      if (s.brand_color_primary) {
+        document.documentElement.style.setProperty("--color-primary", s.brand_color_primary);
+      }
+      if (s.brand_color_accent) {
+        document.documentElement.style.setProperty("--color-accent", s.brand_color_accent);
+      }
     }
 
-    // Init
-    fetchData().then(data => {
-      renderHero(data.slider || []);
-      renderProducts(data.products || []);
-      renderPackages(data.packages || []);
-      renderGallery(data.gallery || []);
-      renderSettings(data.settings || []);
-    });
+    fetchData();
   </script>
 </body>
 </html>
