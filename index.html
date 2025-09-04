@@ -29,29 +29,101 @@
     nav a{margin:0 6px;color:var(--primary);font-weight:600}
     .btn{padding:10px 14px;border-radius:8px;background:var(--primary);color:#fff;border:none;cursor:pointer}
 
-    /* HERO Swiper */
-  .swiper-hero {
-    width:100%;height:380px;border-radius:12px;overflow:hidden;margin-bottom:24px
-  }
-  .swiper-hero .swiper-slide {
-    display:grid;grid-template-columns:70% 30%;align-items:center;
-    padding:0 20px; /* Jarak kiri-kanan */
-  }
-  .swiper-hero .left {padding:24px;color:#fff;z-index:2}
-  .swiper-hero .left h1{margin:0;font-size: clamp(18px, 4vw, 32px);}
-  .swiper-hero .left p{margin:8px 0 12px}
-  .swiper-hero .right {text-align:center;padding:10px}
-  .swiper-hero .right img{
-    width:240px;height:auto;object-fit:cover;border-radius:12px;margin:auto
-  }
-  .swiper-hero .bg{position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;opacity:0.4}
+   /* HERO Swiper */
+.swiper-hero {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 24px;
+  position: relative;
+  background-color: #e0f7ff; /* fallback warna latar */
+}
 
-    @media (max-width:900px){
-    .swiper-hero .right img { width:160px;height:auto; }
+/* Slide Layout */
+.swiper-hero .swiper-slide {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  gap: 20px;
+}
+
+/* Kiri: Teks */
+.swiper-hero .left {
+  flex: 1 1 300px;
+  color: #fff;
+  z-index: 2;
+  padding: 24px;
+}
+
+.swiper-hero .left h1 {
+  margin: 0;
+  font-size: clamp(18px, 4vw, 36px);
+  line-height: 1.2;
+}
+
+.swiper-hero .left p {
+  margin: 8px 0 12px;
+  font-size: clamp(14px, 2vw, 18px);
+}
+
+/* Tombol */
+.swiper-hero .left button {
+  padding: 10px 20px;
+  font-size: clamp(12px, 1.5vw, 16px);
+  background-color: #003366;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* Kanan: Gambar */
+.swiper-hero .right {
+  flex: 0 1 240px;
+  text-align: center;
+  padding: 10px;
+}
+
+.swiper-hero .right img {
+  width: 100%;
+  max-width: 240px;
+  height: auto;
+  object-fit: contain;
+  border-radius: 12px;
+  margin: auto;
+}
+
+/* Background Layer */
+.swiper-hero .bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0.4;
+  object-fit: cover;
+}
+
+/* Responsif Ekstra */
+@media (max-width: 600px) {
+  .swiper-hero .swiper-slide {
+    flex-direction: column;
+    text-align: center;
   }
-  @media (max-width:520px){
-    .swiper-hero .right img { width:120px;height:auto; }
+
+  .swiper-hero .left {
+    padding: 16px;
   }
+
+  .swiper-hero .right {
+    padding: 0;
+  }
+}
+
     /* Controls + grid */
     .controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
     .search{flex:1;min-width:180px;padding:10px;border-radius:8px;border:1px solid #ddd}
