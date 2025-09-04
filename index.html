@@ -5,57 +5,78 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>M E G Cafe, Gym & Carwash</title>
   <meta name="description" content="M E G Cafe, Gym & Carwash — makan enak, gym modern, dan layanan cuci mobil profesional." />
-  <link rel="stylesheet" href="styles.css">
+  
+  <!-- Swiper CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+  <!-- GLightbox CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css"/>
+  
   <style>
-    /* Minimal reset + utility */
     :root{
-      --primary:#2E6B41; /* green cafe */
-      --accent:#F0A500;  /* warm accent */
+      --primary:#2D4A7F; /* biru MEG */
+      --accent:#F6B221;  /* oranye MEG */
+      --dark:#1a1a1a;
       --muted:#6b6b6b;
       --bg:#ffffff;
       --card:#fbfbfb;
     }
     body{font-family:Inter, system-ui, Arial, sans-serif;margin:0;background:var(--bg);color:#222}
-    a{color:inherit}
+    a{color:inherit;text-decoration:none}
     .container{max-width:1100px;margin:0 auto;padding:20px}
     header{display:flex;justify-content:space-between;align-items:center;padding:12px 0}
     header .brand{display:flex;gap:12px;align-items:center}
     header img.logo{height:48px}
+    nav a{margin:0 6px;color:var(--primary);font-weight:600}
     .btn{padding:10px 14px;border-radius:8px;background:var(--primary);color:#fff;border:none;cursor:pointer}
-    /* HERO 70:30 */
-    .hero{display:grid;grid-template-columns:70% 30%;gap:16px;align-items:center;margin-bottom:24px}
-    .hero .left h1{font-size:28px;margin:0 0 8px}
-    .hero .left p{color:var(--muted);margin:0 0 12px}
-    .hero .right img{width:100%;height:260px;object-fit:cover;border-radius:12px}
-    /* products */
+    
+    /* HERO Swiper */
+    .swiper-hero{width:100%;height:360px;border-radius:12px;overflow:hidden;margin-bottom:24px}
+    .swiper-hero .swiper-slide{display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff;background:var(--primary);position:relative}
+    .swiper-hero img{width:100%;height:100%;object-fit:cover}
+    .swiper-hero .overlay{position:absolute;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.3)}
+    .swiper-hero .caption{position:absolute;bottom:30px;left:30px;color:#fff;z-index:2}
+    .swiper-hero .caption h1{margin:0;font-size:32px}
+    .swiper-hero .caption p{margin:6px 0 12px}
+    
+    /* Controls + grid */
     .controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
     .search{flex:1;min-width:180px;padding:10px;border-radius:8px;border:1px solid #ddd}
     .filter{padding:10px;border-radius:8px;border:1px solid #ddd;background:#fff}
     .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
     .card{display:flex;gap:12px;align-items:center;padding:12px;background:var(--card);border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,0.04)}
-    .card img{width:120px;height:80px;object-fit:cover;border-radius:8px}
+    .card img{width:120px;height:80px;object-fit:cover;border-radius:8px;cursor:pointer}
     .card .meta h4{margin:0 0 6px;font-size:16px}
-    .price{font-weight:700}
-    .price .old{text-decoration:line-through;color:#888;margin-left:8px;font-weight:400}
+    .price{font-weight:700;color:var(--primary)}
+    
     /* packages */
     .packages{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0}
     .pkg{flex:1;padding:12px;border-radius:10px;background:#fff;border:1px solid #eee}
+    
     /* gallery slider basic */
     .gallery{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}
     .gallery img{height:160px;border-radius:10px;object-fit:cover;margin-right:8px}
+    
+    /* video & features grid */
+    .video-features{display:grid;grid-template-columns:70% 30%;gap:16px;align-items:flex-start}
+    .video-features iframe{width:100%;height:315px;border-radius:12px}
+    .features ul{margin:0;padding-left:20px}
+    
+    /* footer */
+    footer{background:var(--dark);color:#fff;padding:24px;text-align:center;margin-top:40px}
+    
     /* responsive */
     @media (max-width:900px){
-      .hero{grid-template-columns:1fr;gap:12px}
       .grid{grid-template-columns:repeat(2,1fr)}
-      .hero .right img{height:200px}
+      .video-features{grid-template-columns:1fr}
     }
     @media (max-width:520px){
       .grid{grid-template-columns:1fr}
       header img.logo{height:38px}
-      .hero .right img{height:160px}
     }
+    
     /* floating WA button */
-    .wa-float{position:fixed;right:18px;bottom:18px;background:#25D366;color:#fff;border-radius:50%;width:56px;height:56px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,0.2);z-index:999}
+    .wa-float{position:fixed;right:18px;bottom:18px;width:56px;height:56px;z-index:999}
+    .wa-float img{width:100%;height:100%}
   </style>
 </head>
 <body>
@@ -73,20 +94,13 @@
       </nav>
     </header>
 
-    <!-- HERO -->
-    <section class="hero" id="hero">
-      <div class="left">
-        <h1 id="hero-title">Selamat datang di M E G Cafe</h1>
-        <p id="hero-sub">Makanan lezat • Gym modern • Cuci mobil profesional</p>
-        <div style="display:flex;gap:12px;margin-top:12px">
-          <a class="btn" id="hero-btn">Pesan Sekarang</a>
-          <a href="#menu" style="align-self:center;color:var(--primary)">Lihat Menu →</a>
-        </div>
-      </div>
-      <div class="right">
-        <img id="hero-image" src="hero-default.jpg" alt="Produk MEG">
-      </div>
-    </section>
+    <!-- HERO Swiper -->
+    <div class="swiper swiper-hero">
+      <div class="swiper-wrapper" id="heroSlides"></div>
+      <div class="swiper-pagination"></div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+    </div>
 
     <!-- Controls -->
     <section id="menu">
@@ -102,7 +116,8 @@
           <option value="price_desc">Harga: Tinggi → Rendah</option>
         </select>
       </div>
-      <div id="productsGrid" class="grid"><!-- injected --></div>
+
+      <div id="productsGrid" class="grid"></div>
     </section>
 
     <!-- Packages -->
@@ -117,23 +132,23 @@
       <div id="gallerySlider" class="gallery"></div>
     </section>
 
-    <!-- Youtube -->
+    <!-- Video + Features -->
     <section id="video" style="margin-top:22px">
-      <h2>Video Kami</h2>
-      <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px">
-        <iframe id="ytframe" style="position:absolute;left:0;top:0;width:100%;height:100%;" src="" frameborder="0" allowfullscreen></iframe>
+      <h2>Video & Kelebihan Kami</h2>
+      <div class="video-features">
+        <div>
+          <iframe id="ytframe" src="" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <div class="features">
+          <h3>Kelebihan Kami</h3>
+          <ul>
+            <li>Menu berbahan lokal dan sehat</li>
+            <li>Gym lengkap & bersih, trainer profesional</li>
+            <li>Proses cuci cepat dan hasil kinclong</li>
+            <li>Booking online & pembayaran fleksibel</li>
+          </ul>
+        </div>
       </div>
-    </section>
-
-    <!-- Kelebihan -->
-    <section id="features" style="margin-top:22px">
-      <h2>Kelebihan Kami</h2>
-      <ul>
-        <li>Menu berbahan lokal dan sehat</li>
-        <li>Gym lengkap & bersih, trainer profesional</li>
-        <li>Proses cuci cepat dan hasil kinclong</li>
-        <li>Booking online & pembayaran fleksibel</li>
-      </ul>
     </section>
 
     <!-- Kontak -->
@@ -143,8 +158,7 @@
         <div>
           <p id="address">Alamat: —</p>
           <p>Telp/WA: <a id="phoneLink" href="#">—</a></p>
-          <p id="open-hours">Jam Operasional: —</p>
-          <p id="open-days">Hari Buka: —</p>
+          <p>Jam Operasional: 07:00 - 22:00</p>
         </div>
         <div id="mapEmbed"></div>
       </div>
@@ -153,15 +167,22 @@
 
   <!-- Floating WA button -->
   <a id="waFloat" class="wa-float" target="_blank" href="#">
-    <svg width="24" height="24" viewBox="0 0 24 24"><path fill="white" d="M..."/></svg>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
   </a>
 
+  <footer>
+    <p>© 2025 M E G Cafe · Gym · Carwash</p>
+  </footer>
+
+  <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <!-- GLightbox JS -->
+  <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+
   <script>
-    // CONFIG
     const APPS_SCRIPT_BASE = 'https://script.google.com/macros/s/AKfycbyA-J8A83fhg2hHCmoGZ6bvVSw5RHfbzy2Rs--rg-QEMpHvjbbuBj23HoKWz3Cf7Y5B/exec';
     const CACHE_TTL_MIN = 10;
 
-    // Cache util
     function cacheFetch(key, url) {
       const raw = localStorage.getItem(key);
       if (raw) {
@@ -175,9 +196,7 @@
         if (j.ok) {
           localStorage.setItem(key, JSON.stringify({t:Date.now(), data:j.data}));
           return j.data;
-        } else {
-          return Promise.reject(j.error || 'fetch error');
-        }
+        } else return Promise.reject(j.error || 'fetch error');
       });
     }
 
@@ -191,10 +210,7 @@
           cacheFetch('meg_gallery', APPS_SCRIPT_BASE + '?path=gallery'),
         ]);
 
-        // apply settings
         if (settings) {
-          if (settings.brand_color_primary) document.documentElement.style.setProperty('--primary', settings.brand_color_primary);
-          if (settings.brand_color_accent) document.documentElement.style.setProperty('--accent', settings.brand_color_accent);
           if (settings.logo_url) document.querySelector('.logo').src = settings.logo_url;
           if (settings.phone_whatsapp) {
             const waHref = `https://wa.me/${settings.phone_whatsapp.replace(/\D/g,'')}`;
@@ -205,120 +221,103 @@
           if (settings.google_maps_embed) document.getElementById('mapEmbed').innerHTML = settings.google_maps_embed;
           if (settings.youtube_embed) document.getElementById('ytframe').src = settings.youtube_embed;
           if (settings.business_address) document.getElementById('address').textContent = 'Alamat: ' + settings.business_address;
-          if (settings.opening_hours) document.getElementById('open-hours').textContent = 'Jam Operasional: ' + settings.opening_hours;
-          if (settings.opening_days) document.getElementById('open-days').textContent = 'Hari Buka: ' + settings.opening_days;
         }
 
-        // hero slider (ambil urutan pertama aktif)
-        if (slider && slider.length) {
-          const s = slider.find(x => x.active === "YES") || slider[0];
-          document.getElementById('hero-title').textContent = s.title || 'M E G Cafe';
-          document.getElementById('hero-sub').textContent = s.subtitle || '';
-          if (s.image_url) document.getElementById('hero-image').src = s.image_url;
-          if (s.button_link) document.getElementById('hero-btn').onclick = () => window.location = s.button_link;
-          if (s.button_text) document.getElementById('hero-btn').textContent = s.button_text;
-        }
-
-        // products list
-        window.APP_PRODUCTS = products || [];
-        renderProducts(products || []);
-
-        // fill categories
-        const cats = new Set((products||[]).map(p => p.category).filter(Boolean));
-        const sel = document.getElementById('categoryFilter');
-        cats.forEach(c => {
-          const opt = document.createElement('option'); opt.value = c; opt.textContent = c; sel.appendChild(opt);
+        // hero slider
+        const heroBox = document.getElementById('heroSlides');
+        (slider||[]).forEach(s => {
+          const slide = document.createElement('div'); slide.className = 'swiper-slide';
+          slide.innerHTML = `
+            ${s.image_url ? `<img src="${s.image_url}" alt="${s.title||''}">` : ''}
+            <div class="overlay"></div>
+            <div class="caption">
+              <h1>${s.title||''}</h1>
+              <p>${s.subtitle||''}</p>
+              ${s.button_link ? `<a href="${s.button_link}" class="btn">Pesan Sekarang</a>` : ''}
+            </div>`;
+          heroBox.appendChild(slide);
+        });
+        new Swiper(".swiper-hero", {
+          loop:true,
+          autoplay:{delay:4000},
+          pagination:{el:".swiper-pagination", clickable:true},
+          navigation:{nextEl:".swiper-button-next", prevEl:".swiper-button-prev"},
         });
 
+        // products
+        window.APP_PRODUCTS = products||[];
+        renderProducts(products||[]);
+        const cats = new Set((products||[]).map(p => p.category).filter(Boolean));
+        const sel = document.getElementById('categoryFilter');
+        cats.forEach(c => { const opt=document.createElement('option');opt.value=c;opt.textContent=c;sel.appendChild(opt); });
+
         // packages
-        renderPackages(packages || []);
-
+        renderPackages(packages||[]);
         // gallery
-        renderGallery(gallery || []);
+        renderGallery(gallery||[]);
 
-        // handlers
-        document.getElementById('search').addEventListener('input', debounce(() => applyFilter(), 250));
-        document.getElementById('categoryFilter').addEventListener('change', () => applyFilter());
-        document.getElementById('sort').addEventListener('change', () => applyFilter());
+        // filter events
+        document.getElementById('search').addEventListener('input', debounce(e=>applyFilter(),250));
+        document.getElementById('categoryFilter').addEventListener('change', e=>applyFilter());
+        document.getElementById('sort').addEventListener('change', e=>applyFilter());
 
-      } catch (err) {
-        console.error('init error', err);
-      }
+        GLightbox({selector:'.glightbox'});
+      } catch(err){ console.error('init error',err); }
     }
 
     function renderProducts(list) {
-      const grid = document.getElementById('productsGrid');
-      grid.innerHTML = '';
-      const shuffled = shuffle(list.slice());
-      shuffled.forEach(p => {
-        if (p.active !== "YES" || p.status !== "READY") return;
-        const card = document.createElement('div'); card.className = 'card';
-        card.innerHTML = `
-          <img loading="lazy" src="${p.image_url || 'placeholder.jpg'}" alt="${p.name || ''}">
+      const grid=document.getElementById('productsGrid');
+      grid.innerHTML='';
+      list.forEach(p=>{
+        const card=document.createElement('div');card.className='card';
+        card.innerHTML=`
+          <a href="${p.image_url||'placeholder.jpg'}" class="glightbox" data-gallery="products">
+            <img loading="lazy" src="${p.image_url||'placeholder.jpg'}" alt="${p.name||''}">
+          </a>
           <div class="meta">
-            <h4>${p.name}</h4>
-            <div style="color:var(--muted);font-size:13px">${p.description || ''}</div>
-            <div style="margin-top:8px">
-              <span class="price">${formatCurrency(p.price_discount || p.price_original)}</span>
-              ${p.price_discount ? `<span class="old">${formatCurrency(p.price_original)}</span>` : ''}
-            </div>
-          </div>
-        `;
+            <h4>${p.name||''}</h4>
+            <div style="color:var(--muted);font-size:13px">${p.description||''}</div>
+            <div class="price">${formatCurrency(p.price_original)}</div>
+          </div>`;
         grid.appendChild(card);
       });
     }
 
     function renderPackages(list){
-      const box = document.getElementById('packagesList');
-      box.innerHTML = '';
-      (list||[]).forEach(p => {
-        if (p.active !== "YES") return;
-        const el = document.createElement('div'); el.className = 'pkg';
-        el.innerHTML = `<h4>${p.name} <small style="color:var(--muted)">${p.type||''}</small></h4>
-          <p style="color:var(--muted)">${p.description}</p>
-          <div style="margin-top:8px;font-weight:700">${formatCurrency(p.price)}</div>
-          <div style="font-size:13px;color:var(--muted)">${p.duration||''}</div>`;
+      const box=document.getElementById('packagesList'); box.innerHTML='';
+      (list||[]).forEach(p=>{
+        const el=document.createElement('div');el.className='pkg';
+        el.innerHTML=`<h4>${p.name} <small style="color:var(--muted)">${p.type||''}</small></h4>
+          <p style="color:var(--muted)">${p.description||''}</p>
+          <div style="margin-top:8px;font-weight:700">${formatCurrency(p.price)}</div>`;
         box.appendChild(el);
       });
     }
 
     function renderGallery(list){
-      const g = document.getElementById('gallerySlider');
-      g.innerHTML = '';
-      (list||[]).forEach(i => {
-        if (i.active !== "YES") return;
-        const img = document.createElement('img');
-        img.src = i.image_url;
-        img.alt = i.caption || '';
-        img.loading = 'lazy';
-        g.appendChild(img);
+      const g=document.getElementById('gallerySlider'); g.innerHTML='';
+      (list||[]).forEach(i=>{
+        const img=document.createElement('img'); img.src=i.image_url; img.alt=i.caption||''; img.loading='lazy'; g.appendChild(img);
       });
     }
 
-    // FILTER + SEARCH
     function applyFilter(){
-      const q = document.getElementById('search').value.trim().toLowerCase();
-      const cat = document.getElementById('categoryFilter').value;
-      const sort = document.getElementById('sort').value;
-      let list = (window.APP_PRODUCTS || []).filter(p => {
-        if (p.active !== "YES" || p.status !== "READY") return false;
-        if (cat && p.category !== cat) return false;
-        if (!q) return true;
-        return (p.name + ' ' + (p.description||'') + ' ' + (p.tags||'')).toLowerCase().includes(q);
+      const q=document.getElementById('search').value.trim().toLowerCase();
+      const cat=document.getElementById('categoryFilter').value;
+      const sort=document.getElementById('sort').value;
+      let list=(window.APP_PRODUCTS||[]).filter(p=>{
+        if(cat&&p.category!==cat) return false;
+        if(!q) return true;
+        return (p.name+' '+(p.description||'')+' '+(p.tags||'')).toLowerCase().includes(q);
       });
-
-      if (sort === 'price_asc') list.sort((a,b)=>(Number(a.price_discount||a.price_original)||0)-(Number(b.price_discount||b.price_original)||0));
-      if (sort === 'price_desc') list.sort((a,b)=>(Number(b.price_discount||b.price_original)||0)-(Number(a.price_discount||a.price_original)||0));
-      if (sort === 'name') list.sort((a,b)=> (a.name||'').localeCompare(b.name||''));
+      if(sort==='price_asc') list.sort((a,b)=>(Number(a.price_original)||0)-(Number(b.price_original)||0));
+      if(sort==='price_desc') list.sort((a,b)=>(Number(b.price_original)||0)-(Number(a.price_original)||0));
+      if(sort==='name') list.sort((a,b)=>(a.name||'').localeCompare(b.name||''));
       renderProducts(list);
     }
 
-    // helpers
     function formatCurrency(v){ if(!v) return ''; try{ return new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR'}).format(Number(v)); }catch(e){ return v; } }
-    function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a }
-    function debounce(fn, wait){ let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args), wait); } }
-
-    // init
+    function debounce(fn, wait){ let t; return(...args)=>{clearTimeout(t);t=setTimeout(()=>fn(...args),wait);} }
     init();
   </script>
 </body>
