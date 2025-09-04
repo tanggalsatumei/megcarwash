@@ -73,7 +73,7 @@
       </nav>
     </header>
 
-    <!-- HERO 70:30 -->
+    <!-- HERO -->
     <section class="hero" id="hero">
       <div class="left">
         <h1 id="hero-title">Selamat datang di M E G Cafe</h1>
@@ -102,10 +102,7 @@
           <option value="price_desc">Harga: Tinggi → Rendah</option>
         </select>
       </div>
-
-      <div id="productsGrid" class="grid">
-        <!-- cards injected -->
-      </div>
+      <div id="productsGrid" class="grid"><!-- injected --></div>
     </section>
 
     <!-- Packages -->
@@ -146,14 +143,12 @@
         <div>
           <p id="address">Alamat: —</p>
           <p>Telp/WA: <a id="phoneLink" href="#">—</a></p>
-          <p>Jam Operasional: 07:00 - 22:00</p>
+          <p id="open-hours">Jam Operasional: —</p>
+          <p id="open-days">Hari Buka: —</p>
         </div>
-        <div id="mapEmbed">
-          <!-- map iframe -->
-        </div>
+        <div id="mapEmbed"></div>
       </div>
     </section>
-
   </div>
 
   <!-- Floating WA button -->
@@ -163,19 +158,17 @@
 
   <script>
     // CONFIG
-    const APPS_SCRIPT_BASE = 'https://script.google.com/macros/s/AKfycbydl4_bKwUdo37UVRoMUXpkEGuH3ymaybyFuDQZhpd-V4BhOTzkwhXMsyKha7ijZxGR/exec'; // replace with your web app URL
-    const CACHE_TTL_MIN = 10; // cache in minutes
+    const APPS_SCRIPT_BASE = 'https://script.google.com/macros/s/AKfycbyA-J8A83fhg2hHCmoGZ6bvVSw5RHfbzy2Rs--rg-QEMpHvjbbuBj23HoKWz3Cf7Y5B/exec';
+    const CACHE_TTL_MIN = 10;
 
-    // Simple cache using localStorage with timestamp
+    // Cache util
     function cacheFetch(key, url) {
       const raw = localStorage.getItem(key);
       if (raw) {
         try {
           const obj = JSON.parse(raw);
           const ageMin = (Date.now() - obj.t)/60000;
-          if (ageMin < CACHE_TTL_MIN && obj.data) {
-            return Promise.resolve(obj.data);
-          }
+          if (ageMin < CACHE_TTL_MIN && obj.data) return Promise.resolve(obj.data);
         } catch(e){}
       }
       return fetch(url).then(r => r.json()).then(j => {
@@ -209,22 +202,21 @@
             document.getElementById('phoneLink').href = waHref;
             document.getElementById('phoneLink').textContent = settings.phone_whatsapp;
           }
-          if (settings.google_maps_embed) {
-            document.getElementById('mapEmbed').innerHTML = settings.google_maps_embed;
-          }
-          if (settings.youtube_embed) {
-            document.getElementById('ytframe').src = settings.youtube_embed;
-          }
+          if (settings.google_maps_embed) document.getElementById('mapEmbed').innerHTML = settings.google_maps_embed;
+          if (settings.youtube_embed) document.getElementById('ytframe').src = settings.youtube_embed;
           if (settings.business_address) document.getElementById('address').textContent = 'Alamat: ' + settings.business_address;
+          if (settings.opening_hours) document.getElementById('open-hours').textContent = 'Jam Operasional: ' + settings.opening_hours;
+          if (settings.opening_days) document.getElementById('open-days').textContent = 'Hari Buka: ' + settings.opening_days;
         }
 
-        // hero
+        // hero slider (ambil urutan pertama aktif)
         if (slider && slider.length) {
-          const s = slider[0];
+          const s = slider.find(x => x.active === "YES") || slider[0];
           document.getElementById('hero-title').textContent = s.title || 'M E G Cafe';
           document.getElementById('hero-sub').textContent = s.subtitle || '';
           if (s.image_url) document.getElementById('hero-image').src = s.image_url;
           if (s.button_link) document.getElementById('hero-btn').onclick = () => window.location = s.button_link;
+          if (s.button_text) document.getElementById('hero-btn').textContent = s.button_text;
         }
 
         // products list
@@ -244,10 +236,10 @@
         // gallery
         renderGallery(gallery || []);
 
-        // event handlers
-        document.getElementById('search').addEventListener('input', debounce(e => applyFilter(), 250));
-        document.getElementById('categoryFilter').addEventListener('change', e => applyFilter());
-        document.getElementById('sort').addEventListener('change', e => applyFilter());
+        // handlers
+        document.getElementById('search').addEventListener('input', debounce(() => applyFilter(), 250));
+        document.getElementById('categoryFilter').addEventListener('change', () => applyFilter());
+        document.getElementById('sort').addEventListener('change', () => applyFilter());
 
       } catch (err) {
         console.error('init error', err);
@@ -257,9 +249,9 @@
     function renderProducts(list) {
       const grid = document.getElementById('productsGrid');
       grid.innerHTML = '';
-      // randomize or order? user wanted random: show shuffling
       const shuffled = shuffle(list.slice());
       shuffled.forEach(p => {
+        if (p.active !== "YES" || p.status !== "READY") return;
         const card = document.createElement('div'); card.className = 'card';
         card.innerHTML = `
           <img loading="lazy" src="${p.image_url || 'placeholder.jpg'}" alt="${p.name || ''}">
@@ -280,10 +272,12 @@
       const box = document.getElementById('packagesList');
       box.innerHTML = '';
       (list||[]).forEach(p => {
+        if (p.active !== "YES") return;
         const el = document.createElement('div'); el.className = 'pkg';
         el.innerHTML = `<h4>${p.name} <small style="color:var(--muted)">${p.type||''}</small></h4>
           <p style="color:var(--muted)">${p.description}</p>
-          <div style="margin-top:8px;font-weight:700">${formatCurrency(p.price)}</div>`;
+          <div style="margin-top:8px;font-weight:700">${formatCurrency(p.price)}</div>
+          <div style="font-size:13px;color:var(--muted)">${p.duration||''}</div>`;
         box.appendChild(el);
       });
     }
@@ -292,6 +286,7 @@
       const g = document.getElementById('gallerySlider');
       g.innerHTML = '';
       (list||[]).forEach(i => {
+        if (i.active !== "YES") return;
         const img = document.createElement('img');
         img.src = i.image_url;
         img.alt = i.caption || '';
@@ -306,6 +301,7 @@
       const cat = document.getElementById('categoryFilter').value;
       const sort = document.getElementById('sort').value;
       let list = (window.APP_PRODUCTS || []).filter(p => {
+        if (p.active !== "YES" || p.status !== "READY") return false;
         if (cat && p.category !== cat) return false;
         if (!q) return true;
         return (p.name + ' ' + (p.description||'') + ' ' + (p.tags||'')).toLowerCase().includes(q);
@@ -322,7 +318,7 @@
     function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a }
     function debounce(fn, wait){ let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args), wait); } }
 
-    // initialize
+    // init
     init();
   </script>
 </body>
