@@ -5,16 +5,16 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>M E G Cafe, Gym & Carwash</title>
   <meta name="description" content="M E G Cafe, Gym & Carwash — makan enak, gym modern, dan layanan cuci mobil profesional." />
-  
+
   <!-- Swiper CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
   <!-- GLightbox CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css"/>
-  
+
   <style>
     :root{
-      --primary:#2D4A7F; /* biru MEG */
-      --accent:#F6B221;  /* oranye MEG */
+      --primary:#2D4A7F;
+      --accent:#F6B221;
       --dark:#1a1a1a;
       --muted:#6b6b6b;
       --bg:#ffffff;
@@ -28,16 +28,16 @@
     header img.logo{height:48px}
     nav a{margin:0 6px;color:var(--primary);font-weight:600}
     .btn{padding:10px 14px;border-radius:8px;background:var(--primary);color:#fff;border:none;cursor:pointer}
-    
+
     /* HERO Swiper */
-    .swiper-hero{width:100%;height:360px;border-radius:12px;overflow:hidden;margin-bottom:24px}
-    .swiper-hero .swiper-slide{display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff;background:var(--primary);position:relative}
-    .swiper-hero img{width:100%;height:100%;object-fit:cover}
-    .swiper-hero .overlay{position:absolute;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.3)}
-    .swiper-hero .caption{position:absolute;bottom:30px;left:30px;color:#fff;z-index:2}
-    .swiper-hero .caption h1{margin:0;font-size:32px}
-    .swiper-hero .caption p{margin:6px 0 12px}
-    
+    .swiper-hero{width:100%;height:380px;border-radius:12px;overflow:hidden;margin-bottom:24px}
+    .swiper-hero .swiper-slide{display:grid;grid-template-columns:70% 30%;align-items:center}
+    .swiper-hero .left{padding:24px;color:#fff;z-index:2}
+    .swiper-hero .left h1{margin:0;font-size:32px}
+    .swiper-hero .left p{margin:8px 0 12px}
+    .swiper-hero .right img{width:100%;height:100%;object-fit:cover}
+    .swiper-hero .bg{position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;opacity:0.4}
+
     /* Controls + grid */
     .controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
     .search{flex:1;min-width:180px;padding:10px;border-radius:8px;border:1px solid #ddd}
@@ -47,33 +47,34 @@
     .card img{width:120px;height:80px;object-fit:cover;border-radius:8px;cursor:pointer}
     .card .meta h4{margin:0 0 6px;font-size:16px}
     .price{font-weight:700;color:var(--primary)}
-    
+
     /* packages */
     .packages{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0}
     .pkg{flex:1;padding:12px;border-radius:10px;background:#fff;border:1px solid #eee}
-    
+
     /* gallery slider basic */
     .gallery{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}
     .gallery img{height:160px;border-radius:10px;object-fit:cover;margin-right:8px}
-    
+
     /* video & features grid */
     .video-features{display:grid;grid-template-columns:70% 30%;gap:16px;align-items:flex-start}
     .video-features iframe{width:100%;height:315px;border-radius:12px}
     .features ul{margin:0;padding-left:20px}
-    
+
     /* footer */
     footer{background:var(--dark);color:#fff;padding:24px;text-align:center;margin-top:40px}
-    
+
     /* responsive */
     @media (max-width:900px){
       .grid{grid-template-columns:repeat(2,1fr)}
       .video-features{grid-template-columns:1fr}
+      .swiper-hero .swiper-slide{grid-template-columns:1fr}
     }
     @media (max-width:520px){
       .grid{grid-template-columns:1fr}
       header img.logo{height:38px}
     }
-    
+
     /* floating WA button */
     .wa-float{position:fixed;right:18px;bottom:18px;width:56px;height:56px;z-index:999}
     .wa-float img{width:100%;height:100%}
@@ -116,7 +117,6 @@
           <option value="price_desc">Harga: Tinggi → Rendah</option>
         </select>
       </div>
-
       <div id="productsGrid" class="grid"></div>
     </section>
 
@@ -158,7 +158,7 @@
         <div>
           <p id="address">Alamat: —</p>
           <p>Telp/WA: <a id="phoneLink" href="#">—</a></p>
-          <p>Jam Operasional: 07:00 - 22:00</p>
+          <p>Jam Operasional: <span id="openHours">07:00 - 22:00</span></p>
         </div>
         <div id="mapEmbed"></div>
       </div>
@@ -218,23 +218,33 @@
             document.getElementById('phoneLink').href = waHref;
             document.getElementById('phoneLink').textContent = settings.phone_whatsapp;
           }
-          if (settings.google_maps_embed) document.getElementById('mapEmbed').innerHTML = settings.google_maps_embed;
+          if (settings.google_maps_embed) {
+            document.getElementById('mapEmbed').innerHTML = settings.google_maps_embed;
+          } else {
+            // fallback jika tidak ada di spreadsheet
+            document.getElementById('mapEmbed').innerHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1992.352141501076!2d112.3998654504567!3d-7.124982324081749!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e77f7df461e2a43%3A0x126fa1043952a986!2sMEG%20CARWASH%2C%20GYM%20AND%20CAFE!5e1!3m2!1sen!2sid!4v1756956511661!5m2!1sen!2sid" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
+          }
           if (settings.youtube_embed) document.getElementById('ytframe').src = settings.youtube_embed;
           if (settings.business_address) document.getElementById('address').textContent = 'Alamat: ' + settings.business_address;
+          if (settings.open_hours) document.getElementById('openHours').textContent = settings.open_hours;
         }
 
         // hero slider
         const heroBox = document.getElementById('heroSlides');
         (slider||[]).forEach(s => {
-          const slide = document.createElement('div'); slide.className = 'swiper-slide';
+          const slide = document.createElement('div'); 
+          slide.className = 'swiper-slide relative';
           slide.innerHTML = `
-            ${s.image_url ? `<img src="${s.image_url}" alt="${s.title||''}">` : ''}
-            <div class="overlay"></div>
-            <div class="caption">
+            <div class="left">
               <h1>${s.title||''}</h1>
               <p>${s.subtitle||''}</p>
-              ${s.button_link ? `<a href="${s.button_link}" class="btn">Pesan Sekarang</a>` : ''}
-            </div>`;
+              ${s.button_link ? `<a href="${s.button_link}" class="btn">${s.button_text||'Pesan Sekarang'}</a>` : ''}
+            </div>
+            <div class="right">
+              ${s.image_url ? `<img src="${s.image_url}" alt="${s.title||''}">` : ''}
+            </div>
+            ${s.bg_image ? `<img src="${s.bg_image}" class="bg">` : `<div class="bg" style="background:${s.bg_color||'var(--primary)'}"></div>`}
+          `;
           heroBox.appendChild(slide);
         });
         new Swiper(".swiper-hero", {
