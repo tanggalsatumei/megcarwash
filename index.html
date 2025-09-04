@@ -1,324 +1,221 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>M E G Cafe, Gym & Carwash</title>
-  <meta name="description" content="M E G Cafe, Gym & Carwash — makan enak, gym modern, dan layanan cuci mobil profesional." />
-  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MEG Cafe, Gym & Carwash</title>
   <!-- Swiper CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
-  <!-- GLightbox CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
+  <!-- Lightbox CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css"/>
-  
   <style>
-    :root{
-      --primary:#2D4A7F; /* biru MEG */
-      --accent:#F6B221;  /* oranye MEG */
-      --dark:#1a1a1a;
-      --muted:#6b6b6b;
-      --bg:#ffffff;
-      --card:#fbfbfb;
+    :root {
+      --color-primary: #2D4A7F;
+      --color-accent: #F6B221;
+      --color-dark: #1A1A1A;
+      --color-light: #ffffff;
     }
-    body{font-family:Inter, system-ui, Arial, sans-serif;margin:0;background:var(--bg);color:#222}
-    a{color:inherit;text-decoration:none}
-    .container{max-width:1100px;margin:0 auto;padding:20px}
-    header{display:flex;justify-content:space-between;align-items:center;padding:12px 0}
-    header .brand{display:flex;gap:12px;align-items:center}
-    header img.logo{height:48px}
-    nav a{margin:0 6px;color:var(--primary);font-weight:600}
-    .btn{padding:10px 14px;border-radius:8px;background:var(--primary);color:#fff;border:none;cursor:pointer}
-    
-    /* HERO Swiper */
-    .swiper-hero{width:100%;height:360px;border-radius:12px;overflow:hidden;margin-bottom:24px}
-    .swiper-hero .swiper-slide{display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff;background:var(--primary);position:relative}
-    .swiper-hero img{width:100%;height:100%;object-fit:cover}
-    .swiper-hero .overlay{position:absolute;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.3)}
-    .swiper-hero .caption{position:absolute;bottom:30px;left:30px;color:#fff;z-index:2}
-    .swiper-hero .caption h1{margin:0;font-size:32px}
-    .swiper-hero .caption p{margin:6px 0 12px}
-    
-    /* Controls + grid */
-    .controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-    .search{flex:1;min-width:180px;padding:10px;border-radius:8px;border:1px solid #ddd}
-    .filter{padding:10px;border-radius:8px;border:1px solid #ddd;background:#fff}
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-    .card{display:flex;gap:12px;align-items:center;padding:12px;background:var(--card);border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,0.04)}
-    .card img{width:120px;height:80px;object-fit:cover;border-radius:8px;cursor:pointer}
-    .card .meta h4{margin:0 0 6px;font-size:16px}
-    .price{font-weight:700;color:var(--primary)}
-    
-    /* packages */
-    .packages{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0}
-    .pkg{flex:1;padding:12px;border-radius:10px;background:#fff;border:1px solid #eee}
-    
-    /* gallery slider basic */
-    .gallery{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}
-    .gallery img{height:160px;border-radius:10px;object-fit:cover;margin-right:8px}
-    
-    /* video & features grid */
-    .video-features{display:grid;grid-template-columns:70% 30%;gap:16px;align-items:flex-start}
-    .video-features iframe{width:100%;height:315px;border-radius:12px}
-    .features ul{margin:0;padding-left:20px}
-    
-    /* footer */
-    footer{background:var(--dark);color:#fff;padding:24px;text-align:center;margin-top:40px}
-    
-    /* responsive */
-    @media (max-width:900px){
-      .grid{grid-template-columns:repeat(2,1fr)}
-      .video-features{grid-template-columns:1fr}
+    body { font-family: Arial, sans-serif; margin:0; padding:0; }
+    header, footer { width:100%; }
+    /* Hero */
+    #hero { width:100%; position:relative; }
+    .swiper-hero { width:100%; height:500px; }
+    .hero-slide { display:grid; grid-template-columns:70% 30%; align-items:center; height:100%; }
+    .hero-text { padding:2rem; color:var(--color-light); }
+    .hero-bg { width:100%; height:100%; object-fit:cover; }
+    .swiper-button-next, .swiper-button-prev { color:#fff; }
+    /* Produk */
+    #products { padding:3rem 1rem; }
+    .product-card { border:1px solid #eee; border-radius:12px; overflow:hidden; padding:1rem; text-align:center; background:#fff; }
+    .product-card img { width:100%; max-height:180px; object-fit:cover; border-radius:8px; cursor:pointer; }
+    /* Packages */
+    #packages { padding:3rem 1rem; }
+    .package-card { background:#fff; border-radius:12px; padding:1rem; margin:1rem 0; border:1px solid #eee; }
+    /* Gallery */
+    #gallery { padding:3rem 1rem; }
+    .swiper-gallery { height:300px; }
+    .swiper-gallery img { width:100%; height:100%; object-fit:cover; border-radius:8px; }
+    /* Video Section */
+    #video-section { display:grid; grid-template-columns:70% 30%; gap:1rem; padding:3rem 1rem; align-items:start; }
+    #video-section iframe { width:100%; height:350px; border-radius:12px; }
+    .advantages ul { list-style:none; padding:0; }
+    .advantages li { margin:0.5rem 0; }
+    /* Footer */
+    footer { background:var(--color-dark); color:#fff; padding:2rem; text-align:center; }
+    /* WhatsApp Floating */
+    .whatsapp-float { position:fixed; bottom:20px; right:20px; width:60px; height:60px; z-index:1000; }
+    .whatsapp-float img { width:100%; height:auto; }
+    /* Responsive */
+    @media(max-width:768px){
+      .hero-slide { grid-template-columns:1fr; }
+      #video-section { grid-template-columns:1fr; }
     }
-    @media (max-width:520px){
-      .grid{grid-template-columns:1fr}
-      header img.logo{height:38px}
-    }
-    
-    /* floating WA button */
-    .wa-float{position:fixed;right:18px;bottom:18px;width:56px;height:56px;z-index:999}
-    .wa-float img{width:100%;height:100%}
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <div class="brand">
-        <img class="logo" src="logo.png" alt="MEG Cafe Logo">
-        <div>
-          <div style="font-weight:700">M E G</div>
-          <div style="font-size:12px;color:var(--muted)">Cafe · Gym · Carwash</div>
-        </div>
-      </div>
-      <nav>
-        <a href="#menu">Menu</a> · <a href="#packages">Paket</a> · <a href="#gallery">Galeri</a> · <a href="#kontak">Kontak</a>
-      </nav>
-    </header>
-
-    <!-- HERO Swiper -->
+  <!-- Hero -->
+  <section id="hero">
     <div class="swiper swiper-hero">
-      <div class="swiper-wrapper" id="heroSlides"></div>
+      <div class="swiper-wrapper" id="hero-slides"></div>
       <div class="swiper-pagination"></div>
       <div class="swiper-button-prev"></div>
       <div class="swiper-button-next"></div>
     </div>
+  </section>
 
-    <!-- Controls -->
-    <section id="menu">
-      <h2>Menu Kami</h2>
-      <div class="controls">
-        <input id="search" class="search" placeholder="Cari menu, kategori, atau tag..." />
-        <select id="categoryFilter" class="filter">
-          <option value="">Semua Kategori</option>
-        </select>
-        <select id="sort" class="filter">
-          <option value="name">Urut: Nama</option>
-          <option value="price_asc">Harga: Rendah → Tinggi</option>
-          <option value="price_desc">Harga: Tinggi → Rendah</option>
-        </select>
-      </div>
+  <!-- Products -->
+  <section id="products">
+    <h2>Menu & Produk</h2>
+    <div id="products-list" class="grid md:grid-cols-3 gap-4"></div>
+  </section>
 
-      <div id="productsGrid" class="grid"></div>
-    </section>
+  <!-- Packages -->
+  <section id="packages">
+    <h2>Paket Gym & Carwash</h2>
+    <div id="packages-list"></div>
+  </section>
 
-    <!-- Packages -->
-    <section id="packages" style="margin-top:22px">
-      <h2>Paket Gym & Carwash</h2>
-      <div id="packagesList" class="packages"></div>
-    </section>
+  <!-- Gallery -->
+  <section id="gallery">
+    <h2>Galeri</h2>
+    <div class="swiper swiper-gallery">
+      <div class="swiper-wrapper" id="gallery-slides"></div>
+      <div class="swiper-pagination"></div>
+    </div>
+  </section>
 
-    <!-- Gallery -->
-    <section id="gallery" style="margin-top:22px">
-      <h2>Galeri</h2>
-      <div id="gallerySlider" class="gallery"></div>
-    </section>
+  <!-- Video & Advantages -->
+  <section id="video-section">
+    <div id="youtube-container"></div>
+    <div class="advantages">
+      <h3>Kelebihan Kami</h3>
+      <ul id="advantages-list">
+        <li>✅ Gym modern & lengkap</li>
+        <li>✅ Carwash cepat & wangi</li>
+        <li>✅ Cafe nyaman & cozy</li>
+      </ul>
+    </div>
+  </section>
 
-    <!-- Video + Features -->
-    <section id="video" style="margin-top:22px">
-      <h2>Video & Kelebihan Kami</h2>
-      <div class="video-features">
-        <div>
-          <iframe id="ytframe" src="" frameborder="0" allowfullscreen></iframe>
-        </div>
-        <div class="features">
-          <h3>Kelebihan Kami</h3>
-          <ul>
-            <li>Menu berbahan lokal dan sehat</li>
-            <li>Gym lengkap & bersih, trainer profesional</li>
-            <li>Proses cuci cepat dan hasil kinclong</li>
-            <li>Booking online & pembayaran fleksibel</li>
-          </ul>
-        </div>
-      </div>
-    </section>
+  <!-- Maps -->
+  <section id="maps">
+    <h2>Lokasi Kami</h2>
+    <div id="maps-container"></div>
+  </section>
 
-    <!-- Kontak -->
-    <section id="kontak" style="margin-top:22px;margin-bottom:60px">
-      <h2>Kontak & Lokasi</h2>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div>
-          <p id="address">Alamat: —</p>
-          <p>Telp/WA: <a id="phoneLink" href="#">—</a></p>
-          <p>Jam Operasional: 07:00 - 22:00</p>
-        </div>
-        <div id="mapEmbed"></div>
-      </div>
-    </section>
-  </div>
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 MEG Cafe, Gym & Carwash</p>
+  </footer>
 
-  <!-- Floating WA button -->
-  <a id="waFloat" class="wa-float" target="_blank" href="#">
+  <!-- WhatsApp Button -->
+  <a href="#" id="wa-button" class="whatsapp-float" target="_blank">
     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
   </a>
 
-  <footer>
-    <p>© 2025 M E G Cafe · Gym · Carwash</p>
-  </footer>
-
-  <!-- Swiper JS -->
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-  <!-- GLightbox JS -->
+  <!-- JS Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
 
   <script>
-    const APPS_SCRIPT_BASE = 'https://script.google.com/macros/s/AKfycbyA-J8A83fhg2hHCmoGZ6bvVSw5RHfbzy2Rs--rg-QEMpHvjbbuBj23HoKWz3Cf7Y5B/exec';
-    const CACHE_TTL_MIN = 10;
+    const API_URL = "https://script.google.com/macros/s/AKfycbyA-J8A83fhg2hHCmoGZ6bvVSw5RHfbzy2Rs--rg-QEMpHvjbbuBj23HoKWz3Cf7Y5B/exec"; // ganti dengan endpoint JSON
 
-    function cacheFetch(key, url) {
-      const raw = localStorage.getItem(key);
-      if (raw) {
-        try {
-          const obj = JSON.parse(raw);
-          const ageMin = (Date.now() - obj.t)/60000;
-          if (ageMin < CACHE_TTL_MIN && obj.data) return Promise.resolve(obj.data);
-        } catch(e){}
-      }
-      return fetch(url).then(r => r.json()).then(j => {
-        if (j.ok) {
-          localStorage.setItem(key, JSON.stringify({t:Date.now(), data:j.data}));
-          return j.data;
-        } else return Promise.reject(j.error || 'fetch error');
-      });
+    async function fetchData() {
+      const res = await fetch(API_URL);
+      return await res.json();
     }
 
-    async function init() {
-      try {
-        const [settings, slider, products, packages, gallery] = await Promise.all([
-          cacheFetch('meg_settings', APPS_SCRIPT_BASE + '?path=settings'),
-          cacheFetch('meg_slider', APPS_SCRIPT_BASE + '?path=slider'),
-          cacheFetch('meg_products', APPS_SCRIPT_BASE + '?path=products'),
-          cacheFetch('meg_packages', APPS_SCRIPT_BASE + '?path=packages'),
-          cacheFetch('meg_gallery', APPS_SCRIPT_BASE + '?path=gallery'),
-        ]);
-
-        if (settings) {
-          if (settings.logo_url) document.querySelector('.logo').src = settings.logo_url;
-          if (settings.phone_whatsapp) {
-            const waHref = `https://wa.me/${settings.phone_whatsapp.replace(/\D/g,'')}`;
-            document.getElementById('waFloat').href = waHref;
-            document.getElementById('phoneLink').href = waHref;
-            document.getElementById('phoneLink').textContent = settings.phone_whatsapp;
-          }
-          if (settings.google_maps_embed) document.getElementById('mapEmbed').innerHTML = settings.google_maps_embed;
-          if (settings.youtube_embed) document.getElementById('ytframe').src = settings.youtube_embed;
-          if (settings.business_address) document.getElementById('address').textContent = 'Alamat: ' + settings.business_address;
-        }
-
-        // hero slider
-        const heroBox = document.getElementById('heroSlides');
-        (slider||[]).forEach(s => {
-          const slide = document.createElement('div'); slide.className = 'swiper-slide';
-          slide.innerHTML = `
-            ${s.image_url ? `<img src="${s.image_url}" alt="${s.title||''}">` : ''}
-            <div class="overlay"></div>
-            <div class="caption">
-              <h1>${s.title||''}</h1>
-              <p>${s.subtitle||''}</p>
-              ${s.button_link ? `<a href="${s.button_link}" class="btn">Pesan Sekarang</a>` : ''}
-            </div>`;
-          heroBox.appendChild(slide);
-        });
-        new Swiper(".swiper-hero", {
-          loop:true,
-          autoplay:{delay:4000},
-          pagination:{el:".swiper-pagination", clickable:true},
-          navigation:{nextEl:".swiper-button-next", prevEl:".swiper-button-prev"},
-        });
-
-        // products
-        window.APP_PRODUCTS = products||[];
-        renderProducts(products||[]);
-        const cats = new Set((products||[]).map(p => p.category).filter(Boolean));
-        const sel = document.getElementById('categoryFilter');
-        cats.forEach(c => { const opt=document.createElement('option');opt.value=c;opt.textContent=c;sel.appendChild(opt); });
-
-        // packages
-        renderPackages(packages||[]);
-        // gallery
-        renderGallery(gallery||[]);
-
-        // filter events
-        document.getElementById('search').addEventListener('input', debounce(e=>applyFilter(),250));
-        document.getElementById('categoryFilter').addEventListener('change', e=>applyFilter());
-        document.getElementById('sort').addEventListener('change', e=>applyFilter());
-
-        GLightbox({selector:'.glightbox'});
-      } catch(err){ console.error('init error',err); }
-    }
-
-    function renderProducts(list) {
-      const grid=document.getElementById('productsGrid');
-      grid.innerHTML='';
-      list.forEach(p=>{
-        const card=document.createElement('div');card.className='card';
-        card.innerHTML=`
-          <a href="${p.image_url||'placeholder.jpg'}" class="glightbox" data-gallery="products">
-            <img loading="lazy" src="${p.image_url||'placeholder.jpg'}" alt="${p.name||''}">
-          </a>
-          <div class="meta">
-            <h4>${p.name||''}</h4>
-            <div style="color:var(--muted);font-size:13px">${p.description||''}</div>
-            <div class="price">${formatCurrency(p.price_original)}</div>
+    function renderHero(slides){
+      const container = document.getElementById("hero-slides");
+      container.innerHTML = "";
+      slides.filter(s => s.active === "YES").forEach(s => {
+        container.innerHTML += `
+          <div class="swiper-slide hero-slide" style="background:${s.bg_color || "var(--color-primary)"} url('${s.image_url || ""}') center/cover no-repeat;">
+            <div class="hero-text">
+              <h2>${s.title}</h2>
+              <p>${s.subtitle || ""}</p>
+              ${s.button_link ? `<a href="${s.button_link}" class="btn">${s.button_text}</a>` : ""}
+            </div>
+            <div>
+              ${s.image_url ? `<img src="${s.image_url}" alt="${s.alt_text}" class="hero-bg">` : ""}
+            </div>
           </div>`;
-        grid.appendChild(card);
+      });
+      new Swiper(".swiper-hero", {
+        loop:true,
+        autoplay:{delay:4000},
+        navigation:{nextEl:".swiper-button-next", prevEl:".swiper-button-prev"},
+        pagination:{el:".swiper-pagination", clickable:true}
       });
     }
 
-    function renderPackages(list){
-      const box=document.getElementById('packagesList'); box.innerHTML='';
-      (list||[]).forEach(p=>{
-        const el=document.createElement('div');el.className='pkg';
-        el.innerHTML=`<h4>${p.name} <small style="color:var(--muted)">${p.type||''}</small></h4>
-          <p style="color:var(--muted)">${p.description||''}</p>
-          <div style="margin-top:8px;font-weight:700">${formatCurrency(p.price)}</div>`;
-        box.appendChild(el);
+    function renderProducts(products){
+      const list = document.getElementById("products-list");
+      list.innerHTML = "";
+      products.filter(p => p.active === "YES" && p.status === "READY").forEach(p => {
+        list.innerHTML += `
+          <div class="product-card">
+            <a href="${p.image_url}" class="glightbox">
+              <img src="${p.image_url}" alt="${p.name}">
+            </a>
+            <h3>${p.name}</h3>
+            <p>${p.description || ""}</p>
+            <p><strong>${p.currency} ${p.price_original}</strong></p>
+          </div>`;
+      });
+      GLightbox({ selector: ".glightbox" });
+    }
+
+    function renderPackages(packages){
+      const list = document.getElementById("packages-list");
+      list.innerHTML = "";
+      packages.filter(p => p.active === "YES").forEach(p => {
+        list.innerHTML += `
+          <div class="package-card">
+            <h3>${p.name}</h3>
+            <p>${p.description}</p>
+            <p><strong>${p.price} / ${p.duration}</strong></p>
+          </div>`;
       });
     }
 
-    function renderGallery(list){
-      const g=document.getElementById('gallerySlider'); g.innerHTML='';
-      (list||[]).forEach(i=>{
-        const img=document.createElement('img'); img.src=i.image_url; img.alt=i.caption||''; img.loading='lazy'; g.appendChild(img);
+    function renderGallery(gallery){
+      const container = document.getElementById("gallery-slides");
+      container.innerHTML = "";
+      gallery.filter(g => g.active === "YES").forEach(g => {
+        container.innerHTML += `
+          <div class="swiper-slide"><img src="${g.image_url}" alt="${g.caption}"></div>`;
+      });
+      new Swiper(".swiper-gallery", {
+        loop:true,
+        autoplay:{delay:3000},
+        pagination:{el:".swiper-pagination", clickable:true}
       });
     }
 
-    function applyFilter(){
-      const q=document.getElementById('search').value.trim().toLowerCase();
-      const cat=document.getElementById('categoryFilter').value;
-      const sort=document.getElementById('sort').value;
-      let list=(window.APP_PRODUCTS||[]).filter(p=>{
-        if(cat&&p.category!==cat) return false;
-        if(!q) return true;
-        return (p.name+' '+(p.description||'')+' '+(p.tags||'')).toLowerCase().includes(q);
-      });
-      if(sort==='price_asc') list.sort((a,b)=>(Number(a.price_original)||0)-(Number(b.price_original)||0));
-      if(sort==='price_desc') list.sort((a,b)=>(Number(b.price_original)||0)-(Number(a.price_original)||0));
-      if(sort==='name') list.sort((a,b)=>(a.name||'').localeCompare(b.name||''));
-      renderProducts(list);
+    function renderSettings(settings){
+      const s = {};
+      settings.forEach(item => s[item.key] = item.value);
+      // Maps
+      document.getElementById("maps-container").innerHTML = `
+        <iframe src="${s.google_maps_embed}" width="100%" height="350" style="border:0;" allowfullscreen loading="lazy"></iframe>
+      `;
+      // YouTube
+      document.getElementById("youtube-container").innerHTML = `
+        <iframe src="https://www.youtube.com/embed/videoseries?list=${s.youtube_playlist_id}" frameborder="0" allowfullscreen></iframe>
+      `;
+      // WhatsApp
+      document.getElementById("wa-button").href = `https://wa.me/${s.phone_whatsapp}`;
     }
 
-    function formatCurrency(v){ if(!v) return ''; try{ return new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR'}).format(Number(v)); }catch(e){ return v; } }
-    function debounce(fn, wait){ let t; return(...args)=>{clearTimeout(t);t=setTimeout(()=>fn(...args),wait);} }
-    init();
+    // Init
+    fetchData().then(data => {
+      renderHero(data.slider || []);
+      renderProducts(data.products || []);
+      renderPackages(data.packages || []);
+      renderGallery(data.gallery || []);
+      renderSettings(data.settings || []);
+    });
   </script>
 </body>
 </html>
