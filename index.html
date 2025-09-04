@@ -30,14 +30,31 @@
     .btn{padding:10px 14px;border-radius:8px;background:var(--primary);color:#fff;border:none;cursor:pointer}
 
     /* HERO Swiper */
-    .swiper-hero{width:100%;height:380px;border-radius:12px;overflow:hidden;margin-bottom:24px}
-    .swiper-hero .swiper-slide{display:grid;grid-template-columns:70% 30%;align-items:center}
-    .swiper-hero .left{padding:24px;color:#fff;z-index:2}
-    .swiper-hero .left h1{margin:0;font-size:32px}
-    .swiper-hero .left p{margin:8px 0 12px}
-    .swiper-hero .right img{width:260px;height:260px;object-fit:cover;border-radius:12px}
-    .swiper-hero .bg{position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;opacity:0.4}
+  .swiper-hero {
+    width:100%;height:380px;border-radius:12px;overflow:hidden;margin-bottom:24px
+  }
+  .swiper-hero .swiper-slide {
+    display:grid;grid-template-columns:70% 30%;align-items:center;
+    padding:0 20px; /* Jarak kiri-kanan */
+  }
+  .swiper-hero .left {padding:24px;color:#fff;z-index:2}
+  .swiper-hero .left h1{margin:0;font-size:32px}
+  .swiper-hero .left p{margin:8px 0 12px}
+  .swiper-hero .right {text-align:center;padding:10px}
+  .swiper-hero .right img{
+    width:240px;height:240px;object-fit:cover;border-radius:12px;margin:auto
+  }
+  .swiper-hero .bg{position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;opacity:0.4}
 
+    @media (max-width:900px){
+    .swiper-hero .left h1 { font-size:22px; }
+    .swiper-hero .left p { font-size:14px; }
+    .swiper-hero .right img { width:160px;height:160px; }
+  }
+  @media (max-width:520px){
+    .swiper-hero .left h1 { font-size:18px; }
+    .swiper-hero .right img { width:120px;height:120px; }
+  }
     /* Controls + grid */
     .controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
     .search{flex:1;min-width:180px;padding:10px;border-radius:8px;border:1px solid #ddd}
@@ -68,9 +85,6 @@
     @media (max-width:900px){
       .grid{grid-template-columns:repeat(2,1fr)}
       .video-features{grid-template-columns:1fr}
-      .swiper-hero .left h1 { font-size:20px; }
-      .swiper-hero .left p { font-size:14px; }
-      .swiper-hero .right img { width:140px; height:140px; }
     }
     @media (max-width:520px){
       .grid{grid-template-columns:1fr}
@@ -239,7 +253,17 @@
             // fallback jika tidak ada di spreadsheet
             document.getElementById('mapEmbed').innerHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1992.352141501076!2d112.3998654504567!3d-7.124982324081749!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e77f7df461e2a43%3A0x126fa1043952a986!2sMEG%20CARWASH%2C%20GYM%20AND%20CAFE!5e1!3m2!1sen!2sid!4v1756956511661!5m2!1sen!2sid" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
           }
-          if (settings.youtube_embed) document.getElementById('ytframe').src = settings.youtube_embed;
+          if (settings.youtube_embed) {
+  let yurl = settings.youtube_embed;
+  if (yurl.includes("watch?v=")) {
+    // konversi watch?v= ke embed/
+    const videoId = yurl.split("watch?v=")[1].split("&")[0];
+    const listId = yurl.includes("list=") ? yurl.split("list=")[1].split("&")[0] : "";
+    yurl = `https://www.youtube.com/embed/${videoId}${listId ? `?list=${listId}` : ""}`;
+  }
+  document.getElementById('ytframe').src = yurl;
+}
+
           if (settings.business_address) document.getElementById('address').textContent = 'Alamat: ' + settings.business_address;
           if (settings.open_hours) document.getElementById('openHours').textContent = settings.open_hours;
         }
