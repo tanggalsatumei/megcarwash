@@ -33,18 +33,24 @@
   .hamburger { display:none; flex-direction:column; cursor:pointer; gap:4px; }
   .hamburger span { width:28px; height:3px; background:var(--primary); border-radius:2px; }
 
-  @media (max-width:768px){
-    .nav-links {
-      position:fixed; top:0; right:-100%;
-      flex-direction:column; background:#fff;
-      height:100%; width:250px;
-      padding:60px 20px; transition:0.3s;
-      box-shadow:-2px 0 10px rgba(0,0,0,0.1);
-    }
-    .nav-links.active { right:0; }
-    .nav-links a { font-size:20px; margin:12px 0; }
-    .hamburger { display:flex; }
+  /* NAVBAR mobile */
+@media (max-width:768px){
+  .nav-links {
+    position:fixed; top:0; right:-100%;
+    flex-direction:column; background:#fff;
+    height:100%; width:250px;
+    padding:60px 20px; transition:0.3s;
+    box-shadow:-2px 0 10px rgba(0,0,0,0.1);
+    z-index: 9999; /* >>> supaya di atas slider */
   }
+  .nav-links.active { right:0; }
+  .nav-links a { font-size:20px; margin:12px 0; }
+  .hamburger { display:flex; }
+  .close-btn {
+    position:absolute; top:20px; right:20px;
+    font-size:28px; cursor:pointer; color:var(--primary);
+  }
+}
    /* HERO Swiper */
 .swiper-hero {
   width: 100%;
@@ -160,9 +166,22 @@
     .video-features iframe{width:100%;height:315px;border-radius:12px}
     .features ul{margin:0;padding-left:20px}
 
-    /* footer */
-    footer{background:var(--dark);color:#fff;padding:24px;text-align:center;margin-top:40px;width: 100%;}
-
+    /* FOOTER full width */
+footer {
+  background:var(--dark);
+  color:#fff;
+  padding:40px 20px;
+  width:100%; /* full */
+}
+footer .footer-inner {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+  max-width:1100px;
+  margin:auto;
+}
+footer h3 { margin-bottom:10px; }
+    
     /* responsive */
     @media (max-width:900px){
       .grid{grid-template-columns:repeat(2,1fr)}
@@ -202,16 +221,18 @@
         </div>
       </div>
       <nav>
-    <div class="hamburger" onclick="toggleMenu()">
-      <span></span><span></span><span></span>
-    </div>
-    <div class="nav-links" id="navLinks">
-      <a href="#menu">Menu</a>
-      <a href="#packages">Paket</a>
-      <a href="#gallery">Galeri</a>
-      <a href="#kontak">Kontak</a>
-    </div>
-  </nav>
+  <div class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+  <div class="nav-links" id="navLinks">
+    <span class="close-btn" onclick="toggleMenu()">&times;</span>
+    <a href="#menu">Menu</a>
+    <a href="#packages">Paket</a>
+    <a href="#gallery">Galeri</a>
+    <a href="#kontak">Kontak</a>
+  </div>
+</nav>
+
     </header>
 
     <!-- HERO Swiper -->
@@ -277,7 +298,8 @@
     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
   </a>
 
-  <footer style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+  <footer>
+  <div class="footer-inner">
     <div>
       <h3>Kontak Kami</h3>
       <p id="address">Alamat: —</p>
@@ -285,10 +307,13 @@
       <p>Jam Operasional: <span id="openHours">07:00 - 22:00</span></p>
     </div>
     <div class="embed-responsive" id="mapEmbed">
-      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1992.352141501076!2d112.3998654504567!3d-7.124982324081749!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e77f7df461e2a43%3A0x126fa1043952a986!2sMEG%20CARWASH%2C%20GYM%20AND%20CAFE!5e1!3m2!1sen!2sid!4v1756956511661!5m2!1sen!2sid"
+      <iframe src="https://www.google.com/maps/embed?pb=..."
         style="border:0;" allowfullscreen loading="lazy"></iframe>
     </div>
+  </div>
+  <p style="margin-top:20px;text-align:center;">© 2025 M E G Cafe · Gym · Carwash</p>
 </footer>
+
 
 
   <!-- Swiper JS -->
