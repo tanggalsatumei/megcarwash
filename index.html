@@ -28,7 +28,23 @@
     header img.logo{height:48px}
     nav a{margin:0 6px;color:var(--primary);font-weight:600}
     .btn{padding:10px 14px;border-radius:8px;background:var(--primary);color:#fff;border:none;cursor:pointer}
+  .nav-links { display:flex; gap:16px; }
+  .nav-links a { font-size:16px; font-weight:600; }
+  .hamburger { display:none; flex-direction:column; cursor:pointer; gap:4px; }
+  .hamburger span { width:28px; height:3px; background:var(--primary); border-radius:2px; }
 
+  @media (max-width:768px){
+    .nav-links {
+      position:fixed; top:0; right:-100%;
+      flex-direction:column; background:#fff;
+      height:100%; width:250px;
+      padding:60px 20px; transition:0.3s;
+      box-shadow:-2px 0 10px rgba(0,0,0,0.1);
+    }
+    .nav-links.active { right:0; }
+    .nav-links a { font-size:20px; margin:12px 0; }
+    .hamburger { display:flex; }
+  }
    /* HERO Swiper */
 .swiper-hero {
   width: 100%;
@@ -41,11 +57,12 @@
 
 /* Slide Layout */
 .swiper-hero .swiper-slide {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  padding: 20px;
-  gap: 20px;
+  display:grid;
+  grid-template-columns:70% 30%;
+  align-items:center;
+  gap:20px;
+  padding:0 30px; /* jarak samping kiri kanan */
+  box-sizing:border-box;
 }
 
 /* Kiri: Teks */
@@ -77,12 +94,14 @@
 }
 
 /* Kanan: Gambar */
-.swiper-hero .right {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding: 10px;
+.swiper-hero .right img {
+  width:100%;
+  max-width:260px;
+  aspect-ratio:1/1;
+  object-fit:cover;
+  border-radius:12px;
 }
+
 
 .swiper-hero .right img {
   width: 100%;
@@ -190,8 +209,16 @@
         </div>
       </div>
       <nav>
-        <a href="#menu">Menu</a> · <a href="#packages">Paket</a> · <a href="#gallery">Galeri</a> · <a href="#kontak">Kontak</a>
-      </nav>
+    <div class="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="nav-links" id="navLinks">
+      <a href="#menu">Menu</a>
+      <a href="#packages">Paket</a>
+      <a href="#gallery">Galeri</a>
+      <a href="#kontak">Kontak</a>
+    </div>
+  </nav>
     </header>
 
     <!-- HERO Swiper -->
@@ -236,8 +263,10 @@
       <h2>Video & Kelebihan Kami</h2>
       <div class="video-features">
         <div class="embed-responsive">
-          <iframe id="ytframe" src="" frameborder="0" allowfullscreen></iframe>
-        </div>
+  <iframe src="https://www.youtube.com/embed/D7sZtkY8fdI?list=RDEM-QX_69oRWnAUPQuopwbmKg"
+    frameborder="0" allowfullscreen></iframe>
+</div>
+
         <div class="features">
           <h3>Kelebihan Kami</h3>
           <ul>
@@ -250,28 +279,27 @@
       </div>
     </section>
 
-    <!-- Kontak -->
-    <section id="kontak" style="margin-top:22px;margin-bottom:60px">
-      <h2>Kontak & Lokasi</h2>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div>
-          <p id="address">Alamat: —</p>
-          <p>Telp/WA: <a id="phoneLink" href="#">—</a></p>
-          <p>Jam Operasional: <span id="openHours">07:00 - 22:00</span></p>
-        </div>
-        <div id="mapEmbed" class="embed-responsive"></div>
-      </div>
-    </section>
-  </div>
-
-  <!-- Floating WA button -->
+    <!-- Floating WA button -->
   <a id="waFloat" class="wa-float" target="_blank" href="#">
     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
   </a>
 
   <footer>
-    <p>© 2025 M E G Cafe · Gym · Carwash</p>
-  </footer>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:1100px;margin:auto;">
+    <div>
+      <h3>Kontak Kami</h3>
+      <p id="address">Alamat: —</p>
+      <p>Telp/WA: <a id="phoneLink" href="#">—</a></p>
+      <p>Jam Operasional: <span id="openHours">07:00 - 22:00</span></p>
+    </div>
+    <div class="embed-responsive" id="mapEmbed">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1992.352141501076!2d112.3998654504567!3d-7.124982324081749!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e77f7df461e2a43%3A0x126fa1043952a986!2sMEG%20CARWASH%2C%20GYM%20AND%20CAFE!5e1!3m2!1sen!2sid!4v1756956511661!5m2!1sen!2sid"
+        style="border:0;" allowfullscreen loading="lazy"></iframe>
+    </div>
+  </div>
+  <p style="margin-top:20px">© 2025 M E G Cafe · Gym · Carwash</p>
+</footer>
+
 
   <!-- Swiper JS -->
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
@@ -383,6 +411,10 @@
         GLightbox({selector:'.glightbox'});
       } catch(err){ console.error('init error',err); }
     }
+
+    function toggleMenu(){
+  document.getElementById("navLinks").classList.toggle("active");
+}
 
     function renderProducts(list) {
       const grid=document.getElementById('productsGrid');
