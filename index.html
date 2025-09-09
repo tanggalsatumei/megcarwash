@@ -166,21 +166,29 @@
     .video-features iframe{width:100%;height:315px;border-radius:12px}
     .features ul{margin:0;padding-left:20px}
 
-    /* FOOTER full width */
-footer {
-  background:var(--dark);
+    footer {
+  background:#111;   /* warna gelap */
   color:#fff;
-  padding:40px 20px;
-  width:100%; /* full */
+  padding:40px 0;
+  width:100%;
 }
+
 footer .footer-inner {
   display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:20px;
-  max-width:1100px;
-  margin:auto;
+  grid-template-columns:1fr 1fr; /* 2 kolom: kontak & maps */
+  gap:0;                /* hilangkan jarak */
+  width:100%;           /* paksa penuh */
 }
-footer h3 { margin-bottom:10px; }
+
+footer .footer-inner > div {
+  padding:20px;         /* beri jarak dalam */
+}
+footer iframe {
+  width:100%;
+  height:100%;
+  min-height:300px;
+}
+
     
     /* responsive */
     @media (max-width:900px){
@@ -298,7 +306,22 @@ footer h3 { margin-bottom:10px; }
     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
   </a>
 
-  
+  <footer>
+  <div class="footer-inner">
+    <div>
+      <h3>Kontak Kami</h3>
+      <p id="address">Alamat: Jl. Merdeka No.123, Lamongan</p>
+      <p>Telp/WA: <a id="phoneLink" href="#">628123456789</a></p>
+      <p>Jam Operasional: <span id="openHours">07:00 - 22:00</span></p>
+    </div>
+    <div>
+      <iframe src="https://www.google.com/maps/embed?pb=..."
+        style="border:0;" allowfullscreen loading="lazy"></iframe>
+    </div>
+  </div>
+  <p style="margin-top:20px;text-align:center;">© 2025 M E G Cafe · Gym · Carwash</p>
+</footer>
+
 
 
 
@@ -473,19 +496,5 @@ footer h3 { margin-bottom:10px; }
     init();
   </script>
 </body>
-<footer>
-  <div class="footer-inner">
-    <div>
-      <h3>Kontak Kami</h3>
-      <p id="address">Alamat: —</p>
-      <p>Telp/WA: <a id="phoneLink" href="#">—</a></p>
-      <p>Jam Operasional: <span id="openHours">07:00 - 22:00</span></p>
-    </div>
-    <div class="embed-responsive" id="mapEmbed">
-      <iframe src="https://www.google.com/maps/embed?pb=..."
-        style="border:0;" allowfullscreen loading="lazy"></iframe>
-    </div>
-  </div>
-  <p style="margin-top:20px;text-align:center;">© 2025 M E G Cafe · Gym · Carwash</p>
-</footer>
+
 </html>
