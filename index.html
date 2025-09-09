@@ -149,7 +149,7 @@
     .filter{padding:10px;border-radius:8px;border:1px solid #ddd;background:#fff}
     .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
     .card{display:flex;gap:12px;align-items:center;padding:12px;background:var(--card);border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,0.04)}
-    .card img{width:120px;height:80px;object-fit:cover;border-radius:8px;cursor:pointer}
+    .card img{width:150px;aspect-ratio: 1/1;object-fit:cover;border-radius:8px;cursor:pointer}
     .card .meta h4{margin:0 0 6px;font-size:16px}
     .price{font-weight:700;color:var(--primary)}
 
@@ -159,7 +159,45 @@
 
     /* gallery slider basic */
     .gallery{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}
-    .gallery img{height:160px;border-radius:10px;object-fit:cover;margin-right:8px}
+    .gallery img {
+  aspect-ratio: 3/4;   /* ukuran foto galeri 3:4 */
+  height: auto;
+  max-height: 260px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+.gallery img:hover {
+  transform: scale(1.03);
+}
+.modal {
+  display:none;
+  position:fixed;
+  z-index:3000;
+  left:0;top:0;width:100%;height:100%;
+  background:rgba(0,0,0,0.85);
+  justify-content:center;
+  align-items:center;
+}
+.modal-content {
+  max-width:90%;
+  max-height:80%;
+  border-radius:12px;
+}
+#modalCaption {
+  margin-top:12px;
+  text-align:center;
+  color:#fff;
+  font-size:14px;
+}
+.modal .close {
+  position:absolute;
+  top:20px;right:30px;
+  font-size:36px;
+  color:#fff;
+  cursor:pointer;
+}
+
 
     /* video & features grid */
     .video-features{display:grid;grid-template-columns:70% 30%;gap:16px;align-items:flex-start}
@@ -258,11 +296,18 @@
       <div id="packagesList" class="packages"></div>
     </section>
 
-    <!-- Gallery -->
     <section id="gallery" style="margin-top:22px">
-      <h2>Galeri</h2>
-      <div id="gallerySlider" class="gallery"></div>
-    </section>
+  <h2>Galeri</h2>
+  <div id="gallerySlider" class="gallery"></div>
+</section>
+
+<!-- Modal untuk zoom -->
+<div id="galleryModal" class="modal">
+  <span class="close" onclick="closeModal()">&times;</span>
+  <img class="modal-content" id="modalImg">
+  <div id="modalCaption"></div>
+</div>
+
 
     <!-- Video + Features -->
     <section id="video" style="margin-top:22px">
@@ -431,6 +476,7 @@ if (settings.card_color) {
         renderPackages(packages||[]);
         // gallery
         renderGallery(gallery||[]);
+        
 
         // filter events
         document.getElementById('search').addEventListener('input', debounce(e=>applyFilter(),250));
@@ -475,11 +521,27 @@ if (settings.card_color) {
     }
 
     function renderGallery(list){
-      const g=document.getElementById('gallerySlider'); g.innerHTML='';
-      (list||[]).forEach(i=>{
-        const img=document.createElement('img'); img.src=i.image_url; img.alt=i.caption||''; img.loading='lazy'; g.appendChild(img);
-      });
-    }
+  const g = document.getElementById('gallerySlider');
+  g.innerHTML = '';
+  (list||[]).forEach(i => {
+    const img = document.createElement('img');
+    img.src = i.image_url;
+    img.alt = i.caption || '';
+    img.loading = 'lazy';
+    img.onclick = () => openModal(i.image_url, i.caption);
+    g.appendChild(img);
+  });
+}
+
+function openModal(src, caption){
+  document.getElementById('galleryModal').style.display = 'flex';
+  document.getElementById('modalImg').src = src;
+  document.getElementById('modalCaption').textContent = caption || '';
+}
+function closeModal(){
+  document.getElementById('galleryModal').style.display = 'none';
+}
+
 
     function applyFilter(){
       const q=document.getElementById('search').value.trim().toLowerCase();
