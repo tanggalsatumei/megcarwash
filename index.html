@@ -299,6 +299,7 @@
         <p id="address"></p>
         <p>Telp/WA: <a id="phoneLink" href="#"></a></p>
         <p>Jam Operasional: <span id="openHours"></span></p>
+        <p>HAri Operasional: <span id="openDays"></span></p>
       </div>
       <div class="embed-responsive"><iframe id="mapEmbed" src="" allowfullscreen loading="lazy"></iframe></div>
     </div>
@@ -390,7 +391,8 @@ if (settings.card_color) {
 }
 
           if (settings.business_address) document.getElementById('address').textContent = 'Alamat: ' + settings.business_address;
-          if (settings.open_hours) document.getElementById('openHours').textContent = settings.open_hours;
+          if (settings.opening_hours) document.getElementById('openHours').textContent = settings.opening_hours;
+          if (settings.opening_days) document.getElementById('openDays').textContent = settings.opening_days;
         }
 
         // hero slider
