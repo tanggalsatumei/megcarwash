@@ -167,7 +167,11 @@
     .features ul{margin:0;padding-left:20px}
 
      /* footer */
-    footer{background:var(--dark);color:#fff;padding:24px;text-align:center;margin-top:40px}
+    footer{background:var(--dark);color:#fff;width:100%;padding:40px 20px}
+    .footer-inner{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:1200px;margin:auto}
+    .footer a{color:var(--accent)}
+    .footer-copy{text-align:center;margin-top:20px;font-size:14px;opacity:0.8}
+    @media(max-width:768px){.footer-inner{grid-template-columns:1fr}}
     
 
     /* responsive */
@@ -280,14 +284,25 @@
         </div>
       </div>
     </section>
+  </div>
 
     <!-- Floating WA button -->
   <a id="waFloat" class="wa-float" target="_blank" href="#">
     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
   </a>
 
-  <footer>
-    <p>© 2025 M E G Cafe · Gym · Carwash</p>
+  <!-- Footer outside container -->
+  <footer id="kontak">
+    <div class="footer-inner">
+      <div>
+        <h3>Kontak Kami</h3>
+        <p id="address"></p>
+        <p>Telp/WA: <a id="phoneLink" href="#"></a></p>
+        <p>Jam Operasional: <span id="openHours"></span></p>
+      </div>
+      <div class="embed-responsive"><iframe id="mapEmbed" src="" allowfullscreen loading="lazy"></iframe></div>
+    </div>
+    <p class="footer-copy">© 2025 M E G Cafe · Gym · Carwash</p>
   </footer>
 
 
