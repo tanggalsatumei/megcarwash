@@ -346,6 +346,25 @@
         ]);
 
         if (settings) {
+          if (settings.brand_color_primary) {
+  document.documentElement.style.setProperty('--primary', settings.brand_color_primary);
+}
+if (settings.brand_color_accent) {
+  document.documentElement.style.setProperty('--accent', settings.brand_color_accent);
+}
+if (settings.brand_color_dark) {
+  document.documentElement.style.setProperty('--dark', settings.brand_color_dark);
+}
+if (settings.brand_color_muted) {
+  document.documentElement.style.setProperty('--muted', settings.brand_color_muted);
+}
+if (settings.bg_color) {
+  document.documentElement.style.setProperty('--bg', settings.bg_color);
+}
+if (settings.card_color) {
+  document.documentElement.style.setProperty('--card', settings.card_color);
+}
+
           if (settings.logo_url) document.querySelector('.logo').src = settings.logo_url;
           if (settings.phone_whatsapp) {
             const waHref = `https://wa.me/${settings.phone_whatsapp.replace(/\D/g,'')}`;
