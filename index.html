@@ -198,6 +198,37 @@
   cursor:pointer;
 }
 
+    .modal-body {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+}
+.modal-body img {
+  max-width: 320px;
+  width: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+}
+.modal-text {
+  max-width: 400px;
+  color: #fff;
+}
+
+    .modal .prev, .modal .next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 40px;
+  color: #fff;
+  cursor: pointer;
+  padding: 10px;
+  user-select: none;
+}
+.modal .prev { left: 20px; }
+.modal .next { right: 20px; }
+
 
     /* video & features grid */
     .video-features{display:grid;grid-template-columns:70% 30%;gap:16px;align-items:flex-start}
@@ -351,6 +382,32 @@
     <p class="footer-copy">© 2025 M E G Cafe · Gym · Carwash</p>
   </footer>
 
+  <!-- Modal Produk -->
+<div id="productModal" class="modal">
+  <span class="close" onclick="closeProductModal()">&times;</span>
+  <div class="modal-body">
+    <img id="productModalImg" src="" alt="">
+    <div class="modal-text">
+      <h3 id="productModalTitle"></h3>
+      <p id="productModalDesc"></p>
+      <p id="productModalPrice"></p>
+    </div>
+  </div>
+</div>
+
+  <!-- Modal Galeri -->
+<div id="galleryModal" class="modal">
+  <span class="close" onclick="closeGalleryModal()">&times;</span>
+  <span class="prev" onclick="changeSlide(-1)">&#10094;</span>
+  <span class="next" onclick="changeSlide(1)">&#10095;</span>
+  <div class="modal-body">
+    <img id="galleryModalImg" src="" alt="">
+    <div class="modal-text">
+      <p id="galleryModalCaption"></p>
+    </div>
+  </div>
+</div>
+
 
 
 
@@ -492,22 +549,39 @@ if (settings.card_color) {
 }
 
     function renderProducts(list) {
-      const grid=document.getElementById('productsGrid');
-      grid.innerHTML='';
-      list.forEach(p=>{
-        const card=document.createElement('div');card.className='card';
-        card.innerHTML=`
-          <a href="${p.image_url||'placeholder.jpg'}" class="glightbox" data-gallery="products">
-            <img loading="lazy" src="${p.image_url||'placeholder.jpg'}" alt="${p.name||''}">
-          </a>
-          <div class="meta">
-            <h4>${p.name||''}</h4>
-            <div style="color:var(--muted);font-size:13px">${p.description||''}</div>
-            <div class="price">${formatCurrency(p.price_original)}</div>
-          </div>`;
-        grid.appendChild(card);
-      });
-    }
+  const grid = document.getElementById('productsGrid');
+  grid.innerHTML = '';
+  const shuffled = shuffle(list.slice());
+  shuffled.forEach(p => {
+    const card = document.createElement('div'); 
+    card.className = 'card';
+    card.innerHTML = `
+      <img loading="lazy" src="${p.image_url || 'placeholder.jpg'}" alt="${p.name || ''}">
+      <div class="meta">
+        <h4>${p.name}</h4>
+        <div style="color:var(--muted);font-size:13px">${p.description || ''}</div>
+        <div style="margin-top:8px">
+          <span class="price">${formatCurrency(p.price_original)}</span>
+        </div>
+      </div>
+    `;
+    // klik untuk buka modal
+    card.querySelector("img").onclick = () => openProductModal(p);
+    grid.appendChild(card);
+  });
+}
+
+function openProductModal(product){
+  document.getElementById('productModal').style.display = 'flex';
+  document.getElementById('productModalImg').src = product.image_url;
+  document.getElementById('productModalTitle').textContent = product.name;
+  document.getElementById('productModalDesc').textContent = product.description;
+  document.getElementById('productModalPrice').textContent = formatCurrency(product.price_original);
+}
+function closeProductModal(){
+  document.getElementById('productModal').style.display = 'none';
+}
+
 
     function renderPackages(list){
       const box=document.getElementById('packagesList'); box.innerHTML='';
@@ -520,18 +594,42 @@ if (settings.card_color) {
       });
     }
 
-    function renderGallery(list){
+    let galleryIndex = 0;
+let galleryList = [];
+
+function renderGallery(list){
   const g = document.getElementById('gallerySlider');
   g.innerHTML = '';
-  (list||[]).forEach(i => {
+  galleryList = list || [];
+  galleryList.forEach((i, idx) => {
     const img = document.createElement('img');
     img.src = i.image_url;
     img.alt = i.caption || '';
     img.loading = 'lazy';
-    img.onclick = () => openModal(i.image_url, i.caption);
+    img.onclick = () => openGalleryModal(idx);
     g.appendChild(img);
   });
 }
+
+function openGalleryModal(index){
+  galleryIndex = index;
+  const item = galleryList[galleryIndex];
+  document.getElementById('galleryModal').style.display = 'flex';
+  document.getElementById('galleryModalImg').src = item.image_url;
+  document.getElementById('galleryModalCaption').textContent = item.caption || '';
+}
+
+function closeGalleryModal(){
+  document.getElementById('galleryModal').style.display = 'none';
+}
+
+function changeSlide(step){
+  galleryIndex += step;
+  if (galleryIndex < 0) galleryIndex = galleryList.length - 1;
+  if (galleryIndex >= galleryList.length) galleryIndex = 0;
+  openGalleryModal(galleryIndex);
+}
+
 
 function openModal(src, caption){
   document.getElementById('galleryModal').style.display = 'flex';
