@@ -215,6 +215,21 @@
   max-width: 400px;
   color: #fff;
 }
+    @media (max-width: 600px) {
+  .modal-body {
+    flex-direction: column;
+    text-align: center;
+  }
+  .modal-body img {
+    max-width: 90%;
+    width: auto;
+  }
+  .modal-text {
+    max-width: 90%;
+    font-size: 14px;
+  }
+}
+
 
     .modal .prev, .modal .next {
   position: absolute;
@@ -331,14 +346,6 @@
   <h2>Galeri</h2>
   <div id="gallerySlider" class="gallery"></div>
 </section>
-
-<!-- Modal untuk zoom -->
-<div id="galleryModal" class="modal">
-  <span class="close" onclick="closeModal()">&times;</span>
-  <img class="modal-content" id="modalImg">
-  <div id="modalCaption"></div>
-</div>
-
 
     <!-- Video + Features -->
     <section id="video" style="margin-top:22px">
@@ -476,10 +483,10 @@ if (settings.card_color) {
             document.getElementById('phoneLink').textContent = settings.phone_whatsapp;
           }
           if (settings.google_maps_embed) {
-            document.getElementById('mapEmbed').innerHTML = settings.google_maps_embed;
+            document.getElementById('mapEmbed').src = settings.google_maps_embed;
           } else {
             // fallback jika tidak ada di spreadsheet
-            document.getElementById('mapEmbed').innerHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1992.352141501076!2d112.3998654504567!3d-7.124982324081749!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e77f7df461e2a43%3A0x126fa1043952a986!2sMEG%20CARWASH%2C%20GYM%20AND%20CAFE!5e1!3m2!1sen!2sid!4v1756956511661!5m2!1sen!2sid" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
+            document.getElementById('mapEmbed').src = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1992.352141501076!2d112.3998654504567!3d-7.124982324081749!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e77f7df461e2a43%3A0x126fa1043952a986!2sMEG%20CARWASH%2C%20GYM%20AND%20CAFE!5e1!3m2!1sen!2sid!4v1756956511661!5m2!1sen!2sid" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
           }
           if (settings.youtube_embed) {
   let yurl = settings.youtube_embed;
@@ -641,7 +648,6 @@ function changeSlide(step){
   openGalleryModal(galleryIndex);
 }
 
-
 function openModal(src, caption){
   document.getElementById('galleryModal').style.display = 'flex';
   document.getElementById('modalImg').src = src;
@@ -651,6 +657,11 @@ function closeModal(){
   document.getElementById('galleryModal').style.display = 'none';
 }
 
+    window.addEventListener("click",function(e){
+      document.querySelectorAll(".modal").forEach(m=>{if(e.target===m)m.style.display="none";});
+    });
+
+    document.addEventListener('DOMContentLoaded',init);
 
     function applyFilter(){
       const q=document.getElementById('search').value.trim().toLowerCase();
